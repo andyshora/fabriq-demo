@@ -1,0 +1,30 @@
+{
+  "title": "Fabriq Demo",
+  "scenes": [
+    {
+      "key": "intelligence",
+      "view_x": 100,
+      "view_y": 100,
+      "annotations": [
+        {
+          "tooltip_title": "Intelligence 1",
+          "tooltip_desc": "Lorem ipsum",
+          "tooltip_x": 100,
+          "tooltip_y": 100,
+          "tooltip_dir": "tr",
+          "tooltip_offset_x": 50,
+          "tooltip_offset_y": 50
+        },
+        {
+          "tooltip_title": "Intelligence 2",
+          "tooltip_desc": "Lorem ipsum sudor",
+          "tooltip_x": 200,
+          "tooltip_y": 200,
+          "tooltip_dir": "bl",
+          "tooltip_offset_x": 50,
+          "tooltip_offset_y": 50
+        }
+      ]
+    }
+  ]
+}
