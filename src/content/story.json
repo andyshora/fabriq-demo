@@ -3,8 +3,8 @@
   "scenes": [
     {
       "key": "intelligence",
-      "view_x": 100,
-      "view_y": 100,
+      "view_x": 750,
+      "view_y": 275,
       "annotations": [
         {
           "tooltip_title": "Intelligence 1",
@@ -18,8 +18,8 @@
         {
           "tooltip_title": "Intelligence 2",
           "tooltip_desc": "Lorem ipsum sudor",
-          "tooltip_x": 400,
-          "tooltip_y": 400,
+          "tooltip_x": 500,
+          "tooltip_y": 200,
           "tooltip_dir": "bl",
           "tooltip_offset_x": 50,
           "tooltip_offset_y": 50
@@ -27,24 +27,24 @@
       ]
     },
     {
-      "key": "orchestration",
-      "view_x": 100,
-      "view_y": 100,
+      "key": "campaign-build",
+      "view_x": 1640,
+      "view_y": 465,
       "annotations": [
         {
-          "tooltip_title": "Orchestration 1",
+          "tooltip_title": "Campaign Build 1",
           "tooltip_desc": "Lorem ipsum",
-          "tooltip_x": 200,
-          "tooltip_y": 200,
+          "tooltip_x": 100,
+          "tooltip_y": 400,
           "tooltip_dir": "tr",
           "tooltip_offset_x": 50,
           "tooltip_offset_y": 50
         },
         {
-          "tooltip_title": "Orchestration 2",
+          "tooltip_title": "Campaign Build 2",
           "tooltip_desc": "Lorem ipsum sudor",
           "tooltip_x": 500,
-          "tooltip_y": 500,
+          "tooltip_y": 400,
           "tooltip_dir": "bl",
           "tooltip_offset_x": 50,
           "tooltip_offset_y": 50

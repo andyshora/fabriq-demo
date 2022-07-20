@@ -12,6 +12,7 @@ const TooltipWrap = styled.aside`
     background: linear-gradient(0deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.5));
     border-radius: 3px;
     width: ${TOOLTIP_WIDTH}px;
+    transition: opacity .4s ease;
 `
 
 export default function Tooltip({
@@ -31,7 +32,7 @@ const offset_x = onLeft ? -TOOLTIP_WIDTH : 0
         left: tooltip_x + offset_x,
         top: tooltip_y,
         position: "absolute",
-        border: isActive ? "4px solid lime" : "none" 
+        opacity: isActive ? 1 : 0
     }}>
       <Typography variant="h5">{tooltip_title}</Typography>
       {tooltip_desc ? <Typography>{tooltip_desc}</Typography> : ""}
