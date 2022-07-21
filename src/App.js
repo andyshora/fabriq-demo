@@ -12,6 +12,20 @@ import styled from 'styled-components';
 const IMG_WIDTH = 1920
 const IMG_HEIGHT = 1080
 
+const Header = styled.header`
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: white;
+  z-index: 3;
+  clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+
+  > img {
+    margin: 10px 0 10px 2rem;
+  }
+`
+
 const NavWrap = styled.nav`
   width: 100%;
   position: fixed;
@@ -27,9 +41,17 @@ const DebugWrap = styled.aside`
   padding: 1rem;
   color: blue;
   text-align: right;
+  display: none;
 `
 
 const ImageWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
+`
+
+const VideoWrap = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
@@ -86,14 +108,16 @@ export default function App() {
   const viewXY = useMemo(() => {
     return {
       x: story.scenes[activeSceneIndex].view_x,
-      y: story.scenes[activeSceneIndex].view_y
+      y: story.scenes[activeSceneIndex].view_y,
+      scale: story.scenes[activeSceneIndex].scale
     }
   }, [activeSceneIndex])
 
   const imgTransform = useMemo(() => {
     const x =  windowDimensions.centerX - viewXY.x
     const y = windowDimensions.centerY - viewXY.y
-    return `translate3d(${x}px, ${y}px, 0)`
+    const scale = viewXY.scale || 1
+    return `translate3d(${x}px, ${y}px, 0) scale(${scale})`
   }, [activeSceneIndex])
 
   function handleAreaClick(e) {
@@ -153,19 +177,27 @@ export default function App() {
 
   return (
     <div>
+      <Header>
+        <img src={process.env.PUBLIC_URL + '/images/logo-small.png'} alt="FABRIQ" height={40} />
+      </Header>
       <ImageWrap>
-        <Img src={process.env.PUBLIC_URL + '/images/fab36.png'} useMap="#scenemap" alt="" style={{ transform: imgTransform }} />
+        <Img src={process.env.PUBLIC_URL + '/images/fab-large-01.png'} useMap="#scenemap" alt="" style={{ transform: imgTransform }} />
         <map name="scenemap">
           <area shape="rect" coords="0,0,100,100" alt="Intelligence" onClick={handleAreaClick} data-area-key="intelligence" />
         </map>
         <AnnotationsWrap>
           {story.scenes.map((scene, i) => 
             <div key={`scene-${scene.key}`}>
-              {scene.annotations.map((annot, j) => <Tooltip key={`scene-${scene.key}--annot-${j}`} {...annot} isActive={activeSceneIndex === i && activeAnnotationIndex === j} />)}
+              {scene.annotations.map((annot, j) => <Tooltip key={`scene-${scene.key}--annot-${j}`} {...{...annot, tooltip_x: windowDimensions.centerX + annot.tooltip_x, tooltip_y: windowDimensions.centerY + annot.tooltip_y}} isActive={activeSceneIndex === i && activeAnnotationIndex === j} />)}
             </div>
           )}
         </AnnotationsWrap>
       </ImageWrap>
+      {/* <VideoWrap>
+        <video autoPlay muted loop id="bg-video">
+          <source src={process.env.PUBLIC_URL + '/images/dataingestion.mp4'} type="video/mp4" />
+        </video>
+      </VideoWrap> */}
       <NavWrap>
         <IconButton aria-label="Backward" onClick={handlePrevClick} disabled={isAtStart}>
           <PrevIcon />
