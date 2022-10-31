@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback, useLayoutEffect } from 'react';
+import Draggable from "react-draggable"
 import IconButton from '@mui/material/IconButton';
 import NextIcon from '@mui/icons-material/ArrowForwardIos';
 import PrevIcon from '@mui/icons-material/ArrowBackIos';
@@ -8,9 +9,15 @@ import _debounce from "lodash-es/debounce"
 import Tooltip from './components/Tooltip';
 import story from "./content/story.json"
 import styled from 'styled-components';
+import { scaleLinear } from 'd3-scale';
 
-const IMG_WIDTH = 1920
-const IMG_HEIGHT = 1080
+const IMG_WIDTH = 4000
+const IMG_HEIGHT = 2000
+const VIDEO_NAME = '0001-0100.mp4'
+
+const IMG_NAME = 'skeleton.png'
+
+const useVideo = false
 
 const Header = styled.header`
   width: 250px;
@@ -41,7 +48,7 @@ const DebugWrap = styled.aside`
   padding: 1rem;
   color: blue;
   text-align: right;
-  display: none;
+  pointer-events: none;
 `
 
 const ImageWrap = styled.div`
@@ -58,7 +65,9 @@ const VideoWrap = styled.div`
   overflow: hidden;
 `
 
-const AnnotationsWrap = styled.div``
+const AnnotationsWrap = styled.div`
+  display: none;
+`
 
 const Img = styled.img`
   position: absolute;
@@ -69,6 +78,25 @@ const Img = styled.img`
   height: ${IMG_HEIGHT}px;
   transition: all 1s ease;
 `
+
+const Video = styled.video`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0);
+  width: ${IMG_WIDTH}px;
+  height: ${IMG_HEIGHT}px;
+  transition: all 1s ease;
+`
+
+const DraggableHandleLayer = styled.div({
+  width: IMG_WIDTH,
+  height: IMG_HEIGHT,
+  position: "absolute",
+  left: 0,
+  top: 0,
+  background: "rgba(255, 0, 0, 0)"
+})
 
 function getWindowDimensions() {
   const width = window.innerWidth
@@ -85,6 +113,9 @@ export default function App() {
 
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
   const [activeKey, setActiveKey] = useState("")
+  const [manualFocus, setManualFocus] = useState({ x: null, y: null })
+  const [draggableBounds, setDraggableBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
+  const [lastLocationClicked, setLastLocationClicked] = useState({ x: 0, y: 0 })
   const [activeSceneIndex, setActiveSceneIndex] = useState(0)
   const [activeAnnotationIndex, setActiveAnnotationIndex] = useState(0)
   const isOnLastAnnotationOfScene = useMemo(() => {
@@ -93,7 +124,15 @@ export default function App() {
 
   const isAtStart = !activeSceneIndex && !activeAnnotationIndex
   const isAtEnd = activeSceneIndex === story.scenes.length - 1 && isOnLastAnnotationOfScene
-  console.log(windowDimensions)
+  
+  
+
+  // useEffect(() => {
+  //   const x = imgMapScales.x(lastLocationClicked.x)
+  //   const y = imgMapScales.y(lastLocationClicked.y)
+  //   console.log(x, y)
+  //   setManualFocus({ x, y })
+  // }, [windowDimensions, lastLocationClicked])
 
   useEffect(() => {
     function handleResize() {
@@ -105,20 +144,35 @@ export default function App() {
     return () => window.removeEventListener('resize', debouncedResize);
   }, [])
 
-  const viewXY = useMemo(() => {
-    return {
-      x: story.scenes[activeSceneIndex].view_x,
-      y: story.scenes[activeSceneIndex].view_y,
-      scale: story.scenes[activeSceneIndex].scale
-    }
-  }, [activeSceneIndex])
+  useEffect(() => {
+    const xRange = [0, -IMG_WIDTH + windowDimensions.width ]
+    const yRange = [0, -IMG_HEIGHT + windowDimensions.height ]
+    setDraggableBounds({ left: xRange[1], top: yRange[1], right: xRange[0], bottom: yRange[0] })
+  }, [windowDimensions])
 
-  const imgTransform = useMemo(() => {
+  const viewXY = useMemo(() => {
+    if (!Number.isNaN(manualFocus.x) && !Number.isNaN(manualFocus.y)) {
+      return {
+        x: manualFocus.x,
+        y: manualFocus.y,
+        scale: 1
+      }
+    } else {
+      return {
+        x: story.scenes[activeSceneIndex].view_x,
+        y: story.scenes[activeSceneIndex].view_y,
+        scale: story.scenes[activeSceneIndex].scale
+      }
+    }
+   
+  }, [activeSceneIndex, manualFocus.x, manualFocus.y])
+
+  const imgTransform2 = useMemo(() => {
     const x =  windowDimensions.centerX - viewXY.x
     const y = windowDimensions.centerY - viewXY.y
     const scale = viewXY.scale || 1
     return `translate3d(${x}px, ${y}px, 0) scale(${scale})`
-  }, [activeSceneIndex])
+  }, [windowDimensions, activeSceneIndex, manualFocus.x, manualFocus.y])
 
   function handleAreaClick(e) {
     const key = e.target.getAttribute("data-area-key")
@@ -165,9 +219,17 @@ export default function App() {
     
   }
 
+  function handleImgMapClicked(e) {
+    console.log('e', e)
+    const x = e.nativeEvent.offsetX
+    const y =  e.nativeEvent.offsetY
+    setLastLocationClicked({ x, y })
+  }
+
   useHotkeys('left, right', e => {
     const { key } = e
     e.preventDefault()
+    setManualFocus({ x: null, y: null })
     if (key === "ArrowRight") {
       handleNextClick()
     } else {
@@ -175,16 +237,42 @@ export default function App() {
     }
   }, [activeSceneIndex, activeAnnotationIndex])
 
+  const eventHandler = (e, data) => {
+    console.log('Event Type', e.type);
+    console.log({e, data});
+  }
+
   return (
     <div>
       <Header>
         <img src={process.env.PUBLIC_URL + '/images/logo-small.png'} alt="FABRIQ" height={40} />
       </Header>
       <ImageWrap>
-        <Img src={process.env.PUBLIC_URL + '/images/fab-large-01.png'} useMap="#scenemap" alt="" style={{ transform: imgTransform }} />
-        <map name="scenemap">
-          <area shape="rect" coords="0,0,100,100" alt="Intelligence" onClick={handleAreaClick} data-area-key="intelligence" />
-        </map>
+        <Draggable
+          defaultPosition={{x: 0, y: -windowDimensions.height * 0.5}}
+          bounds={draggableBounds}
+          handle=".react-draggable-handle"
+          onMouseDown={eventHandler}
+          onStart={eventHandler}
+          onDrag={eventHandler}
+          onStop={eventHandler}>
+          <div style={{ width: IMG_WIDTH, height: IMG_HEIGHT }}>
+            { useVideo ? (
+              <Video autoPlay muted loop id="bg-video"  style={{ transform: '' }}>
+                <source src={process.env.PUBLIC_URL + '/images/' + VIDEO_NAME} type="video/mp4" />
+              </Video>
+            ) : (
+              <>
+                <Img src={process.env.PUBLIC_URL + '/images/' + IMG_NAME} useMap="#scenemap" alt="" />
+                <map name="scenemap">
+                  <area shape="rect" coords="0,0,100,100" alt="Intelligence" onClick={handleAreaClick} data-area-key="intelligence" />
+                </map>
+              </>
+            )}
+            <DraggableHandleLayer className="react-draggable-handle" />
+          </div>
+        </Draggable>
+       
         <AnnotationsWrap>
           {story.scenes.map((scene, i) => 
             <div key={`scene-${scene.key}`}>
@@ -193,11 +281,6 @@ export default function App() {
           )}
         </AnnotationsWrap>
       </ImageWrap>
-      {/* <VideoWrap>
-        <video autoPlay muted loop id="bg-video">
-          <source src={process.env.PUBLIC_URL + '/images/dataingestion.mp4'} type="video/mp4" />
-        </video>
-      </VideoWrap> */}
       <NavWrap>
         <IconButton aria-label="Backward" onClick={handlePrevClick} disabled={isAtStart}>
           <PrevIcon />
@@ -206,7 +289,8 @@ export default function App() {
           <NextIcon />
         </IconButton>
       </NavWrap>
-      <DebugWrap>viewXY: {viewXY.x}, {viewXY.y}, activeKey: {activeKey}, activeSceneIndex: {activeSceneIndex}, activeAnnotationIndex: {activeAnnotationIndex}, isAtStart: {isAtStart ? "YES" : ""}, isAtEnd: {isAtEnd ? "YES" : ""}, isOnLastAnnotationOfScene: {isOnLastAnnotationOfScene ? "YES" : ""}</DebugWrap>
+      <DebugWrap>llClicked: {lastLocationClicked.x}, {lastLocationClicked.y}</DebugWrap>
+      {/* <DebugWrap>viewXY: {viewXY.x}, {viewXY.y}, activeKey: {activeKey}, activeSceneIndex: {activeSceneIndex}, activeAnnotationIndex: {activeAnnotationIndex}, isAtStart: {isAtStart ? "YES" : ""}, isAtEnd: {isAtEnd ? "YES" : ""}, isOnLastAnnotationOfScene: {isOnLastAnnotationOfScene ? "YES" : ""}</DebugWrap> */}
     </div>
   )
 }

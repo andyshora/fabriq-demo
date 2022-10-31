@@ -1,15 +1,80 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Typography } from '@mui/material';
 
 const TOOLTIP_DEFAULT_X = 40
 const TOOLTIP_DEFAULT_Y = 30
 const TOOLTIP_WIDTH = 240
 
+const HANDLE_LENGTH = 80;
+
+const handles = {
+  tl: `
+    &::before {
+      content: '';
+      height: 3px;
+      width: 80px;
+      background: white;
+      position: absolute;
+      top: 0;
+      left: 2px;
+      z-index: 5;
+      display: block;
+      transform: rotate(-135deg);
+      transform-origin: left;
+    }
+  `,
+  tr: `
+    &::before {
+      content: '';
+      height: 3px;
+      width: 80px;
+      background: white;
+      position: absolute;
+      top: 0;
+      right: -${HANDLE_LENGTH - 2}px;
+      z-index: 5;
+      display: block;
+      transform: rotate(-45deg);
+      transform-origin: left;
+    }
+  `,
+  br: `
+    &::before {
+      content: '';
+      height: 3px;
+      width: 80px;
+      background: white;
+      position: absolute;
+      bottom: 0;
+      right: -${HANDLE_LENGTH - 2}px;
+      z-index: 5;
+      display: block;
+      transform: rotate(45deg);
+      transform-origin: left;
+    }
+  `,
+  bl: `
+    &::before {
+      content: '';
+      height: 3px;
+      width: 80px;
+      background: white;
+      position: absolute;
+      bottom: 0;
+      left: 2px;
+      z-index: 5;
+      display: block;
+      transform: rotate(135deg);
+      transform-origin: left;
+    }
+  `
+}
+
 const TooltipWrap = styled.div`
     padding: 0.5rem 0.8rem;
     user-select: none;
-    background: linear-gradient(0deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.5));
+    background: linear-gradient(0deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7));
     border-radius: 3px;
     width: ${TOOLTIP_WIDTH}px;
     transition: opacity .4s ease;
@@ -20,19 +85,7 @@ const TooltipWrap = styled.div`
         
     }
 
-    &::before {
-        content: "";
-        display: block;
-        position: absolute;
-        z-index:1;
-        background: white;
-        right: 0px;
-        bottom: -60px;
-        width: 60px;
-        height: 60px;
-        clip-path: polygon(60% 0, 0 0, 100% 100%);
-        display: none;
-    }
+    ${({ handleDir }) => Object.keys(handles).includes(handleDir) ? css`${handles[handleDir]}` : ''}
 `
 
 const handleRotations = {
@@ -59,7 +112,7 @@ export default function Tooltip({
         top: tooltip_y,
         position: "absolute",
         opacity: isActive ? 1 : 0
-    }}>
+    }} handleDir={tooltip_handle}>
       <Typography variant="h5">{tooltip_title}</Typography>
       {tooltip_desc ? <Typography>{tooltip_desc}</Typography> : ""}
     </TooltipWrap>

@@ -1,0 +1,168 @@
+title: Fabriq Demo
+scenes:
+  - key: "integration"
+    view_x: 685
+    view_y: 960
+    scale: 1
+    annotations:
+      - tooltip_title: "Integration"
+        tooltip_desc: "Integrate and augment your existing technology stack"
+        tooltip_x: -600
+        tooltip_y: -150
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Minim Veniam"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+  - key: "os"
+    view_x: 685
+    view_y: 960
+    scale: 1
+    annotations:
+      - tooltip_title: "Lorem Ipsum"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        tooltip_x: -400
+        tooltip_y: -250
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Minim Veniam"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+  - key: "customer-360"
+    view_x: 1430
+    view_y: 1190
+    scale: 1
+    annotations:
+      - tooltip_title: "Customer 360"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        tooltip_x: -400
+        tooltip_y: -250
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Minim Veniam"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+  - key: "intelligence"
+    view_x: 1950
+    view_y: 820
+    scale: 1
+    annotations:
+      - tooltip_title: "Intelligence"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        tooltip_x: -400
+        tooltip_y: -250
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Minim Veniam"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+  - key: "orchestration"
+    view_x: 2250
+    view_y: 775
+    scale: 1
+    annotations:
+      - tooltip_title: "Orchestration"
+        tooltip_desc: "Automate orchestration and experimentation capabilities at scale"
+        tooltip_x: -400
+        tooltip_y: -250
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Minim Veniam"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+  - key: "state-machine"
+    view_x: 2820
+    view_y: 800
+    scale: 1
+    annotations:
+      - tooltip_title: "State Machine"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        tooltip_x: -400
+        tooltip_y: -250
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Minim Veniam"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+  - key: "campaign-build"
+    view_x: 2710
+    view_y: 1000
+    scale: 1
+    annotations:
+      - tooltip_title: "Campaign Build"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        tooltip_x: -400
+        tooltip_y: -250
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Speed"
+        tooltip_desc: "Reduce campaign execution cycles from weeks to days"
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Relevance"
+        tooltip_desc: "Boost content relevance by more than 120%"
+        tooltip_x: 200
+        tooltip_y: 50
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Engagement"
+        tooltip_desc: "Grow user engagement by an average of 30%"
+        tooltip_x: 200
+        tooltip_y: 50
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+  - key: "experimentation"
+    view_x: 2250
+    view_y: 1320
+    scale: 1
+    annotations:
+      - tooltip_title: "Experimentation & Measurement"
+        tooltip_desc: "Campaign automation and experimentation at scale"
+        tooltip_x: -400
+        tooltip_y: -250
+        tooltip_handle: "br"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50
+      - tooltip_title: "Exercitation Ullamco"
+        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
+        tooltip_x: 150
+        tooltip_y: 100
+        tooltip_handle: "tl"
+        tooltip_offset_x: 50
+        tooltip_offset_y: 50

@@ -1,116 +1,21 @@
 title: Fabriq Demo
 scenes:
-  - key: "customer-360"
-    view_x: 180
-    view_y: 660
-    scale: 2
+  - key: "integration"
+    view_x: 685
+    view_y: 960
+    scale: 1
     annotations:
-      - tooltip_title: "Customer 360"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        tooltip_x: -350
+      - tooltip_title: "Lorem"
+        tooltip_desc: "Enim ad minim veniam, quis nostrud exercitation ullamco labori"
+        tooltip_x: -600
         tooltip_y: -150
-        tooltip_handle: "tr"
+        tooltip_handle: "br"
         tooltip_offset_x: 50
         tooltip_offset_y: 50
       - tooltip_title: "Minim Veniam"
         tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
         tooltip_x: 150
         tooltip_y: 100
-        tooltip_handle: "bl"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-  - key: "intelligence"
-    view_x: 750
-    view_y: 275
-    scale: 1.6
-    annotations:
-      - tooltip_title: "Intelligence"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        tooltip_x: -350
-        tooltip_y: -150
-        tooltip_handle: "tr"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-      - tooltip_title: "Minim Veniam"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
-        tooltip_x: 150
-        tooltip_y: 100
-        tooltip_handle: "bl"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-  - key: "orchestration"
-    view_x: 1080
-    view_y: 200
-    scale: 1.4
-    annotations:
-      - tooltip_title: "Orchestration"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        tooltip_x: -350
-        tooltip_y: -150
-        tooltip_handle: "tr"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-      - tooltip_title: "Minim Veniam"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
-        tooltip_x: 150
-        tooltip_y: 100
-        tooltip_handle: "bl"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-  - key: "state-machine"
-    view_x: 1700
-    view_y: 300
-    scale: 2
-    annotations:
-      - tooltip_title: "State Machine"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        tooltip_x: -350
-        tooltip_y: -150
-        tooltip_handle: "tr"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-      - tooltip_title: "Minim Veniam"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
-        tooltip_x: 150
-        tooltip_y: 100
-        tooltip_handle: "bl"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-  - key: "campaign-build"
-    view_x: 1640
-    view_y: 465
-    scale: 2
-    annotations:
-      - tooltip_title: "Campaign Build"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        tooltip_x: -350
-        tooltip_y: -150
-        tooltip_handle: "tr"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-      - tooltip_title: "Quis Nostrud Exercitation"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
-        tooltip_x: 150
-        tooltip_y: 100
-        tooltip_handle: "bl"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-  - key: "experimentation"
-    view_x: 1100
-    view_y: 830
-    scale: 2
-    annotations:
-      - tooltip_title: "Experimentation & Measurement"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        tooltip_x: -350
-        tooltip_y: -150
-        tooltip_handle: "tr"
-        tooltip_offset_x: 50
-        tooltip_offset_y: 50
-      - tooltip_title: "Exercitation Ullamco"
-        tooltip_desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. dolor sit amet, consectetur adipiscing elit."
-        tooltip_x: 150
-        tooltip_y: 100
-        tooltip_handle: "bl"
+        tooltip_handle: "tl"
         tooltip_offset_x: 50
         tooltip_offset_y: 50
