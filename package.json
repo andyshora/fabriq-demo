@@ -2,6 +2,11 @@
   "name": "fabriq-story",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andyshora/fabriq-demo.git"
+  },
   "dependencies": {
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.9.1",
@@ -22,6 +27,7 @@
   "devDependencies": {
     "@craco/craco": "^7.0.0-alpha.7",
     "d3-scale": "^4.0.2",
+    "gh-pages": "^4.0.0",
     "react-draggable": "^4.4.5",
     "yamljs": "^0.3.0"
   },
@@ -30,7 +36,8 @@
     "content": "yaml2json -p -s ./src/content/story.yml",
     "build": "npm run content && craco build",
     "test": "npm run content && craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

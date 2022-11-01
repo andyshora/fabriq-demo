@@ -13,11 +13,11 @@ import { scaleLinear } from 'd3-scale';
 
 const IMG_WIDTH = 4000
 const IMG_HEIGHT = 2000
-const VIDEO_NAME = '0001-0100.mp4'
+const VIDEO_NAME = '0001-0060.mp4'
 
 const IMG_NAME = 'skeleton.png'
 
-const useVideo = false
+const useVideo = true
 
 const Header = styled.header`
   width: 250px;
@@ -49,6 +49,8 @@ const DebugWrap = styled.aside`
   color: blue;
   text-align: right;
   pointer-events: none;
+  font-family: Courier, monospace;
+  font-size: 12px;
 `
 
 const ImageWrap = styled.div`
@@ -56,6 +58,12 @@ const ImageWrap = styled.div`
   height: 100%;
   position: fixed;
   overflow: hidden;
+`
+
+const OverlayWrap = styled.div`
+  position: absolute;
+  border: 5px dashed rgb(197 246 233);
+
 `
 
 const VideoWrap = styled.div`
@@ -89,6 +97,16 @@ const Video = styled.video`
   transition: all 1s ease;
 `
 
+const interactionAreas = [
+  {
+    id: 'optimixer',
+    x: 1100,
+    y: 1255,
+    width: 500,
+    height: 320
+  }
+]
+
 const DraggableHandleLayer = styled.div({
   width: IMG_WIDTH,
   height: IMG_HEIGHT,
@@ -113,9 +131,11 @@ export default function App() {
 
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
   const [activeKey, setActiveKey] = useState("")
+  const [activeInteractionAreas, setActiveInteractionAreas] = useState([])
   const [manualFocus, setManualFocus] = useState({ x: null, y: null })
   const [draggableBounds, setDraggableBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
-  const [lastLocationClicked, setLastLocationClicked] = useState({ x: 0, y: 0 })
+  const [lastMouseDownLocation, setLastMouseDownLocation] = useState({ x: 0, y: 0 })
+  const [draggableOffset, setDraggableOffset] = useState({ x: 0, y: 0 })
   const [activeSceneIndex, setActiveSceneIndex] = useState(0)
   const [activeAnnotationIndex, setActiveAnnotationIndex] = useState(0)
   const isOnLastAnnotationOfScene = useMemo(() => {
@@ -167,13 +187,6 @@ export default function App() {
    
   }, [activeSceneIndex, manualFocus.x, manualFocus.y])
 
-  const imgTransform2 = useMemo(() => {
-    const x =  windowDimensions.centerX - viewXY.x
-    const y = windowDimensions.centerY - viewXY.y
-    const scale = viewXY.scale || 1
-    return `translate3d(${x}px, ${y}px, 0) scale(${scale})`
-  }, [windowDimensions, activeSceneIndex, manualFocus.x, manualFocus.y])
-
   function handleAreaClick(e) {
     const key = e.target.getAttribute("data-area-key")
 
@@ -219,13 +232,6 @@ export default function App() {
     
   }
 
-  function handleImgMapClicked(e) {
-    console.log('e', e)
-    const x = e.nativeEvent.offsetX
-    const y =  e.nativeEvent.offsetY
-    setLastLocationClicked({ x, y })
-  }
-
   useHotkeys('left, right', e => {
     const { key } = e
     e.preventDefault()
@@ -237,9 +243,42 @@ export default function App() {
     }
   }, [activeSceneIndex, activeAnnotationIndex])
 
+  function handleDraggableClicked(e) {
+    
+    const clickX = e.nativeEvent.offsetX
+    const clickY = e.nativeEvent.offsetY
+
+    console.log('handleDraggableClicked', clickX, clickY);
+
+    
+    // use click location to determine which areas should become active
+    const activeAreas = interactionAreas.filter(({ x, y, width, height }) => {
+      return clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height
+    })
+
+    console.log('activeAreas', activeAreas);
+    setActiveInteractionAreas(activeAreas)
+  }
+
   const eventHandler = (e, data) => {
-    console.log('Event Type', e.type);
-    console.log({e, data});
+    
+
+    switch (e.type) {
+      case "mousedown":
+        console.log('Event Type', e.type, data);
+        if (data && !Number.isNaN(data.x)) {
+          setLastMouseDownLocation({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY })
+        }
+
+        break;
+      case "mouseup":
+        console.log('Event Type', e.type, data);
+        setDraggableOffset({ x: data.x, y: data.y })
+
+        break;
+      default:
+        break;
+    }
   }
 
   return (
@@ -252,24 +291,22 @@ export default function App() {
           defaultPosition={{x: 0, y: -windowDimensions.height * 0.5}}
           bounds={draggableBounds}
           handle=".react-draggable-handle"
-          onMouseDown={eventHandler}
           onStart={eventHandler}
           onDrag={eventHandler}
           onStop={eventHandler}>
           <div style={{ width: IMG_WIDTH, height: IMG_HEIGHT }}>
             { useVideo ? (
-              <Video autoPlay muted loop id="bg-video"  style={{ transform: '' }}>
+              <Video autoPlay muted loop id="bg-video">
                 <source src={process.env.PUBLIC_URL + '/images/' + VIDEO_NAME} type="video/mp4" />
               </Video>
             ) : (
-              <>
                 <Img src={process.env.PUBLIC_URL + '/images/' + IMG_NAME} useMap="#scenemap" alt="" />
-                <map name="scenemap">
-                  <area shape="rect" coords="0,0,100,100" alt="Intelligence" onClick={handleAreaClick} data-area-key="intelligence" />
-                </map>
-              </>
             )}
-            <DraggableHandleLayer className="react-draggable-handle" />
+            {activeInteractionAreas.map((area, i) => <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, height: area.height, left: area.x, top: area.y }}>interaction trigger: {area.id}</OverlayWrap>)}
+            <DraggableHandleLayer
+              className="react-draggable-handle"
+              onTouchEnd={handleDraggableClicked}
+              onClick={handleDraggableClicked} />
           </div>
         </Draggable>
        
@@ -280,16 +317,19 @@ export default function App() {
             </div>
           )}
         </AnnotationsWrap>
+        
       </ImageWrap>
-      <NavWrap>
+      {/* <NavWrap>
         <IconButton aria-label="Backward" onClick={handlePrevClick} disabled={isAtStart}>
           <PrevIcon />
         </IconButton>
         <IconButton aria-label="Forward" onClick={handleNextClick}>
           <NextIcon />
         </IconButton>
-      </NavWrap>
-      <DebugWrap>llClicked: {lastLocationClicked.x}, {lastLocationClicked.y}</DebugWrap>
+      </NavWrap> */}
+      <DebugWrap>draggableOffset: {draggableOffset.x}, {draggableOffset.y}, lastMouseDownLocation: {lastMouseDownLocation.x}, {lastMouseDownLocation.y}</DebugWrap>
+
+      
       {/* <DebugWrap>viewXY: {viewXY.x}, {viewXY.y}, activeKey: {activeKey}, activeSceneIndex: {activeSceneIndex}, activeAnnotationIndex: {activeAnnotationIndex}, isAtStart: {isAtStart ? "YES" : ""}, isAtEnd: {isAtEnd ? "YES" : ""}, isOnLastAnnotationOfScene: {isOnLastAnnotationOfScene ? "YES" : ""}</DebugWrap> */}
     </div>
   )
