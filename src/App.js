@@ -13,7 +13,7 @@ import { scaleLinear } from 'd3-scale';
 
 const IMG_WIDTH = 4000
 const IMG_HEIGHT = 2000
-const VIDEO_NAME = 'vid_003.mp4'
+const VIDEO_NAME = 'vid_04.mp4'
 
 const IMG_NAME = 'skeleton.png'
 
