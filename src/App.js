@@ -13,7 +13,7 @@ import { scaleLinear } from 'd3-scale';
 
 const IMG_WIDTH = 4000
 const IMG_HEIGHT = 2000
-const VIDEO_NAME = '0001-0100.mp4'
+const VIDEO_NAME = 'vid_003.mp4'
 
 const IMG_NAME = 'skeleton.png'
 
@@ -101,9 +101,23 @@ const interactionAreas = [
   {
     id: 'optimixer',
     x: 1100,
-    y: 1255,
+    y: 1080,
     width: 500,
-    height: 320
+    height: 480
+  },
+  {
+    id: 'action factory',
+    x: 840,
+    y: 1450,
+    width: 400,
+    height: 280
+  },
+  {
+    id: 'customer 360',
+    x: 1100,
+    y: 1590,
+    width: 400,
+    height: 280
   }
 ]
 
