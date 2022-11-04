@@ -1,16 +1,14 @@
 import { useEffect, useState, useMemo } from 'react';
 import Draggable from "react-draggable"
-import IconButton from '@mui/material/IconButton';
-import NextIcon from '@mui/icons-material/ArrowForwardIos';
-import PrevIcon from '@mui/icons-material/ArrowBackIos';
+import CloseIcon from "@mui/icons-material/Close"
 import { useHotkeys } from 'react-hotkeys-hook'
 import _debounce from "lodash-es/debounce"
 
 import Tooltip from './components/Tooltip';
 import story from "./content/story.json"
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-import { Button, Box, Grid, Typography } from "@mui/material"
+import { Button, Box, Card, CardContent, CardHeader, Grid, Typography, Select, MenuItem, FormControl, InputLabel, IconButton, CardActions } from "@mui/material"
 
 const IMG_WIDTH = 4000
 const IMG_HEIGHT = 2000
@@ -52,6 +50,7 @@ const DebugWrap = styled.aside`
   pointer-events: none;
   font-family: Courier, monospace;
   font-size: 12px;
+  display: none;
 `
 
 const ImageWrap = styled.div`
@@ -61,17 +60,52 @@ const ImageWrap = styled.div`
   overflow: hidden;
 `
 
-const OverlayWrap = styled.div`
-  position: absolute;
-  border: 5px dashed rgb(197 246 233);
-
+const tooltipEnter = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 `
 
-const VideoWrap = styled.div`
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  overflow: hidden;
+const swipeEnter = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+
+  }
+`
+
+const TooltipCard = styled(Card)`
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+  animation: ${tooltipEnter} 1.6s forwards;
+`
+
+const OverlayWrap = styled.div`
+  position: absolute;
+  animation: ${swipeEnter} 1.6s forwards;
+  
+  &::after {
+    content: '';
+    width: 100px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.2);
+    
+    transform-origin: 0 0;
+    position: absolute;
+    left: -100px;
+    bottom: -20px;
+    animation: ${tooltipEnter} 1.6s forwards;
+
+    clip-path: polygon(100% 0, 0 100%, 100% 59%);
+
+  }
 `
 
 const AnnotationsWrap = styled.div`
@@ -101,6 +135,7 @@ const Video = styled.video`
 const interactionAreas = [
   {
     id: 'optimixer',
+    title: 'Optimixer',
     type: 'launch',
     x: 1100,
     y: 1080,
@@ -109,6 +144,7 @@ const interactionAreas = [
   },
   {
     id: 'action factory',
+    title: 'Action Factory',
     type: 'story',
     x: 840,
     y: 1450,
@@ -117,6 +153,7 @@ const interactionAreas = [
   },
   {
     id: 'customer 360',
+    title: 'Customer 360',
     type: 'story',
     x: 1100,
     y: 1590,
@@ -125,13 +162,19 @@ const interactionAreas = [
   }
 ]
 
-function InteractionArea({ id, type }) {
+function InteractionArea({ id, type, width, height, onClose, title }) {
 
   return (
-    <Box>
-      <Typography variant="h4">interaction trigger: {id}</Typography>
-      {type === 'launch' ? <Button variant="contained">Launch App</Button> : ''}
-    </Box>
+    <TooltipCard style={{ width }}>
+      <CardContent style={{ minHeight: 200 }}>
+        <IconButton aria-label="Close" onClick={onClose} style={{ position: 'absolute', right: '1rem', top: '1rem' }}>
+          <CloseIcon />
+        </IconButton>
+        <Typography variant="h3">{title}</Typography>
+        <Typography>Lorem ipsum, story annotations here</Typography>
+      </CardContent>
+      {type === 'launch' ? <CardActions><Button variant="contained">Launch App</Button> </CardActions> : ''}
+    </TooltipCard>
   )
 }
 
@@ -161,6 +204,7 @@ export default function App() {
   const [activeKey, setActiveKey] = useState("")
   const [activeInteractionAreas, setActiveInteractionAreas] = useState([])
   const [manualFocus, setManualFocus] = useState({ x: null, y: null })
+  const [flavour, setFlavour] = useState('default')
   const [draggableBounds, setDraggableBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
   const [lastMouseDownLocation, setLastMouseDownLocation] = useState({ x: 0, y: 0 })
   const [draggableOffset, setDraggableOffset] = useState({ x: 0, y: 0 })
@@ -198,6 +242,7 @@ export default function App() {
     setDraggableBounds({ left: xRange[1], top: yRange[1], right: xRange[0], bottom: yRange[0] })
   }, [windowDimensions])
 
+  /*
   const viewXY = useMemo(() => {
     if (!Number.isNaN(manualFocus.x) && !Number.isNaN(manualFocus.y)) {
       return {
@@ -214,20 +259,12 @@ export default function App() {
     }
    
   }, [activeSceneIndex, manualFocus.x, manualFocus.y])
+  */
 
-  function handleAreaClick(e) {
-    const key = e.target.getAttribute("data-area-key")
-
-    if (key) {
-      setActiveKey(key)
-      setActiveAnnotationIndex(0)
-    }
-
-    const _activeSceneIndex = story.scenes.findIndex(s => s.key === key)
-    if (_activeSceneIndex > -1) {
-      setActiveSceneIndex(_activeSceneIndex)
-    }
+  function handleFlavourChange(e) {
+    setFlavour(e.target.value);
   }
+
   function handlePrevClick() {
     
     if (isAtStart) { return }
@@ -259,7 +296,7 @@ export default function App() {
     }
     
   }
-
+/*
   useHotkeys('left, right', e => {
     const { key } = e
     e.preventDefault()
@@ -270,22 +307,22 @@ export default function App() {
       handlePrevClick()
     }
   }, [activeSceneIndex, activeAnnotationIndex])
-
+*/
   function handleDraggableClicked(e) {
     
     const clickX = e.nativeEvent.offsetX
     const clickY = e.nativeEvent.offsetY
-
-    console.log('handleDraggableClicked', clickX, clickY);
-
     
     // use click location to determine which areas should become active
     const activeAreas = interactionAreas.filter(({ x, y, width, height }) => {
       return clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height
     })
 
-    console.log('activeAreas', activeAreas);
     setActiveInteractionAreas(activeAreas)
+  }
+
+  function handleTooltipClose() {
+    setActiveInteractionAreas([])
   }
 
   const eventHandler = (e, data) => {
@@ -313,10 +350,24 @@ export default function App() {
     <div>
       <Header>
         <img src={process.env.PUBLIC_URL + '/images/logo-small.png'} alt="FABRIQ" height={40} />
+        <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Archetype</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={flavour}
+          label="Age"
+          onChange={handleFlavourChange}
+        >
+          <MenuItem value={'default'}>Archetype 1</MenuItem>
+          <MenuItem value={'two'}>Archetype 2</MenuItem>
+          <MenuItem value={'three'}>Archetype 3</MenuItem>
+        </Select>
+      </FormControl>
       </Header>
       <ImageWrap>
         <Draggable
-          defaultPosition={{x: 0, y: -windowDimensions.height * 0.5}}
+          defaultPosition={{x: -600, y: -1000}}
           bounds={draggableBounds}
           handle=".react-draggable-handle"
           onStart={eventHandler}
@@ -330,7 +381,7 @@ export default function App() {
             ) : (
                 <Img src={process.env.PUBLIC_URL + '/images/' + IMG_NAME} useMap="#scenemap" alt="" />
             )}
-            {activeInteractionAreas.map((area, i) => <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, height: area.height, left: area.x, top: area.y }}><InteractionArea {...area} /></OverlayWrap>)}
+            {activeInteractionAreas.map((area, i) => <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width, top: area.y - 200 }}><InteractionArea {...area} onClose={handleTooltipClose} /></OverlayWrap>)}
             <DraggableHandleLayer
               className="react-draggable-handle"
               onTouchEnd={handleDraggableClicked}
