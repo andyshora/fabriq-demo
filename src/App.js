@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback, useLayoutEffect } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Draggable from "react-draggable"
 import IconButton from '@mui/material/IconButton';
 import NextIcon from '@mui/icons-material/ArrowForwardIos';
@@ -9,7 +9,8 @@ import _debounce from "lodash-es/debounce"
 import Tooltip from './components/Tooltip';
 import story from "./content/story.json"
 import styled from 'styled-components';
-import { scaleLinear } from 'd3-scale';
+
+import { Button, Box, Grid, Typography } from "@mui/material"
 
 const IMG_WIDTH = 4000
 const IMG_HEIGHT = 2000
@@ -100,6 +101,7 @@ const Video = styled.video`
 const interactionAreas = [
   {
     id: 'optimixer',
+    type: 'launch',
     x: 1100,
     y: 1080,
     width: 500,
@@ -107,6 +109,7 @@ const interactionAreas = [
   },
   {
     id: 'action factory',
+    type: 'story',
     x: 840,
     y: 1450,
     width: 400,
@@ -114,12 +117,23 @@ const interactionAreas = [
   },
   {
     id: 'customer 360',
+    type: 'story',
     x: 1100,
     y: 1590,
     width: 400,
     height: 280
   }
 ]
+
+function InteractionArea({ id, type }) {
+
+  return (
+    <Box>
+      <Typography variant="h4">interaction trigger: {id}</Typography>
+      {type === 'launch' ? <Button variant="contained">Launch App</Button> : ''}
+    </Box>
+  )
+}
 
 const DraggableHandleLayer = styled.div({
   width: IMG_WIDTH,
@@ -316,7 +330,7 @@ export default function App() {
             ) : (
                 <Img src={process.env.PUBLIC_URL + '/images/' + IMG_NAME} useMap="#scenemap" alt="" />
             )}
-            {activeInteractionAreas.map((area, i) => <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, height: area.height, left: area.x, top: area.y }}>interaction trigger: {area.id}</OverlayWrap>)}
+            {activeInteractionAreas.map((area, i) => <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, height: area.height, left: area.x, top: area.y }}><InteractionArea {...area} /></OverlayWrap>)}
             <DraggableHandleLayer
               className="react-draggable-handle"
               onTouchEnd={handleDraggableClicked}
