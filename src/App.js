@@ -90,12 +90,13 @@ const TooltipCard = styled(Card)`
 const OverlayWrap = styled.div`
   position: absolute;
   animation: ${swipeEnter} 1.6s forwards;
+  z-index: 2;
   
   &::after {
     content: '';
     width: 100px;
     height: 100px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.1);
     
     transform-origin: 0 0;
     position: absolute;
@@ -184,7 +185,8 @@ const DraggableHandleLayer = styled.div({
   position: "absolute",
   left: 0,
   top: 0,
-  background: "rgba(255, 0, 0, 0)"
+  zIndex: 1,
+  opacity: 0
 })
 
 function getWindowDimensions() {
@@ -312,13 +314,18 @@ export default function App() {
     
     const clickX = e.nativeEvent.offsetX
     const clickY = e.nativeEvent.offsetY
+
+    const isAnnotationOpen = activeInteractionAreas.length > 0
     
     // use click location to determine which areas should become active
     const activeAreas = interactionAreas.filter(({ x, y, width, height }) => {
       return clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height
     })
 
+    // todo - we want to ensure open annotations persist until they are manually closed
     setActiveInteractionAreas(activeAreas)
+    
+    
   }
 
   function handleTooltipClose() {
