@@ -12,7 +12,7 @@ import { Button, Box, Card, CardContent, CardHeader, Grid, Typography, Select, M
 
 const IMG_WIDTH = 4000
 const IMG_HEIGHT = 2000
-const VIDEO_NAME = 'vid_04.mp4'
+const VIDEO_NAME = 'vid_06.mp4'
 
 const IMG_NAME = 'skeleton.png'
 
