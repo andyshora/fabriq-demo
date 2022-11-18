@@ -133,7 +133,9 @@ const Video = styled.video`
   transition: all 1s ease;
 `
 
-const interactionAreas = [
+const interactionAreas = []
+
+const interactionAreas2 = [
   {
     id: 'optimixer',
     title: 'Optimixer',
