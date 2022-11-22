@@ -3,8 +3,6 @@ import Draggable from "react-draggable"
 import CloseIcon from "@mui/icons-material/Close"
 import _debounce from "lodash-es/debounce"
 import _findIndex from "lodash-es/findIndex"
-
-import Tooltip from './components/Tooltip';
 import styled, { keyframes } from 'styled-components';
 
 import archetypes from "./archetypes.json"
@@ -154,7 +152,7 @@ const InteractionPulse = styled.div`
   border: 1px dashed rgba(35, 186, 142, 1);
 `
 
-function Annotation({ id, type, onClose, title, body1, body2, onNextTapped }) {
+function Annotation({ id, type, onClose, title, body1, body2, onNextTapped, onLaunchTapped }) {
 
   return (
     <TooltipCard style={{ width: 400 }}>
@@ -168,7 +166,7 @@ function Annotation({ id, type, onClose, title, body1, body2, onNextTapped }) {
           { body2 ? <Typography sx={{ pt: 0.5 }}>{body2}</Typography> : '' }
         </Box>
       </CardContent>
-      {type === 'launch' ? <CardActions><Button variant="contained">Launch App</Button></CardActions> : <CardActions><Button onClick={onNextTapped} variant="contained">Next <KeyboardArrowRight /></Button></CardActions>}
+      {type === 'launch' ? <CardActions><Button onClick={onLaunchTapped} variant="contained">Launch App</Button></CardActions> : <CardActions><Button onClick={onNextTapped} variant="contained">Next <KeyboardArrowRight /></Button></CardActions>}
     </TooltipCard>
   )
 }
@@ -223,6 +221,10 @@ export default function App() {
     setActiveArchetypeIndex(parseInt(e.target.value, 10))
   }
 
+  function handleLaunchTapped(e) {
+    // todo - soft redirect to app?
+  }
+
   function handleNextTapped() {
     // find index of current
     if (!activeInteractionAreas.length) {
@@ -238,7 +240,6 @@ export default function App() {
     }
 
     setActiveInteractionAreas([archetypes[activeArchetypeIndex].tooltips[indx]])
-      
   }
 
   function handleDraggableClicked(e) {
@@ -317,7 +318,7 @@ export default function App() {
             )}
             {activeInteractionAreas.map((area, i) => (
               <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width + 100, top: area.y - 200 }}>
-                <Annotation {...area} onClose={handleTooltipClose} onNextTapped={handleNextTapped} />
+                <Annotation {...area} onClose={handleTooltipClose} onNextTapped={handleNextTapped} onLaunchTapped={handleLaunchTapped} data-id={area.id} />
                 <InteractionPulse />
               </OverlayWrap>
               ))
