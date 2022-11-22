@@ -1,19 +1,23 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import Draggable from "react-draggable"
 import CloseIcon from "@mui/icons-material/Close"
-import { useHotkeys } from 'react-hotkeys-hook'
 import _debounce from "lodash-es/debounce"
+import _findIndex from "lodash-es/findIndex"
 
 import Tooltip from './components/Tooltip';
-import story from "./content/story.json"
 import styled, { keyframes } from 'styled-components';
 
-import { Button, Box, Card, CardContent, CardHeader, Grid, Typography, Select, MenuItem, FormControl, InputLabel, IconButton, CardActions } from "@mui/material"
+import archetypes from "./archetypes.json"
 
-const IMG_WIDTH = 4000
-const IMG_HEIGHT = 2000
-const VIDEO_NAME = 'vid_06.mp4'
+import { Button, Box, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel, IconButton, CardActions } from "@mui/material"
+import { KeyboardArrowRight } from '@mui/icons-material';
 
+const ZOOM = 0.5
+
+const IMG_WIDTH = 8000 * ZOOM
+const IMG_HEIGHT = 4000 * ZOOM
+
+const VIDEO_NAME = 'vid_09.mp4'
 const IMG_NAME = 'skeleton.png'
 
 const useVideo = true
@@ -30,13 +34,6 @@ const Header = styled.header`
   > img {
     margin: 10px 0 10px 2rem;
   }
-`
-
-const NavWrap = styled.nav`
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  padding: 1rem;
 `
 
 const DebugWrap = styled.aside`
@@ -96,7 +93,7 @@ const OverlayWrap = styled.div`
     content: '';
     width: 100px;
     height: 100px;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(35, 186, 142, 0.5);
     
     transform-origin: 0 0;
     position: absolute;
@@ -107,10 +104,6 @@ const OverlayWrap = styled.div`
     clip-path: polygon(100% 0, 0 100%, 100% 59%);
 
   }
-`
-
-const AnnotationsWrap = styled.div`
-  display: none;
 `
 
 const Img = styled.img`
@@ -133,50 +126,49 @@ const Video = styled.video`
   transition: all 1s ease;
 `
 
-const interactionAreas = []
-
-const interactionAreas2 = [
-  {
-    id: 'optimixer',
-    title: 'Optimixer',
-    type: 'launch',
-    x: 1100,
-    y: 1080,
-    width: 500,
-    height: 480
-  },
-  {
-    id: 'action factory',
-    title: 'Action Factory',
-    type: 'story',
-    x: 840,
-    y: 1450,
-    width: 400,
-    height: 280
-  },
-  {
-    id: 'customer 360',
-    title: 'Customer 360',
-    type: 'story',
-    x: 1100,
-    y: 1590,
-    width: 400,
-    height: 280
+const pulseEntranceAnim = keyframes`
+  0% {
+    opacity: 1;
+    background: radial-gradient(rgba(35, 186, 142, 1)  0%, transparent 50%);
+    border-color: rgba(35, 186, 142, 1);
   }
-]
+  80% {
+    border-color: rgba(35, 186, 142, 1);
+  }
+  100% {
+    opacity: 0;
+    border-color: rgba(35, 186, 142, 0);
+  }
+`
 
-function InteractionArea({ id, type, width, height, onClose, title }) {
+const InteractionPulse = styled.div`
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: -100px 0 0 -100px;
+  bottom: -110px;
+  left: -90px;
+  background: radial-gradient(rgba(35, 186, 142)  0%, transparent 50%);
+  animation: ${pulseEntranceAnim} 3s forwards;
+  border: 1px dashed rgba(35, 186, 142, 1);
+`
+
+function Annotation({ id, type, onClose, title, body1, body2, onNextTapped }) {
 
   return (
-    <TooltipCard style={{ width }}>
+    <TooltipCard style={{ width: 400 }}>
       <CardContent style={{ minHeight: 200 }}>
-        <IconButton aria-label="Close" onClick={onClose} style={{ position: 'absolute', right: '1rem', top: '1rem' }}>
+        <IconButton aria-label="Close" onClick={onClose} style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }}>
           <CloseIcon />
         </IconButton>
-        <Typography variant="h3">{title}</Typography>
-        <Typography>Lorem ipsum, story annotations here</Typography>
+        <Box sx={{ pr: 1 }}>
+          <Typography variant="h3">{title}</Typography>
+          <Typography>{body1}</Typography>
+          { body2 ? <Typography sx={{ pt: 0.5 }}>{body2}</Typography> : '' }
+        </Box>
       </CardContent>
-      {type === 'launch' ? <CardActions><Button variant="contained">Launch App</Button> </CardActions> : ''}
+      {type === 'launch' ? <CardActions><Button variant="contained">Launch App</Button></CardActions> : <CardActions><Button onClick={onNextTapped} variant="contained">Next <KeyboardArrowRight /></Button></CardActions>}
     </TooltipCard>
   )
 }
@@ -205,30 +197,11 @@ function getWindowDimensions() {
 export default function App() {
 
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-  const [activeKey, setActiveKey] = useState("")
   const [activeInteractionAreas, setActiveInteractionAreas] = useState([])
-  const [manualFocus, setManualFocus] = useState({ x: null, y: null })
-  const [flavour, setFlavour] = useState('default')
+  const [activeArchetypeIndex, setActiveArchetypeIndex] = useState(0)
   const [draggableBounds, setDraggableBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
   const [lastMouseDownLocation, setLastMouseDownLocation] = useState({ x: 0, y: 0 })
   const [draggableOffset, setDraggableOffset] = useState({ x: 0, y: 0 })
-  const [activeSceneIndex, setActiveSceneIndex] = useState(0)
-  const [activeAnnotationIndex, setActiveAnnotationIndex] = useState(0)
-  const isOnLastAnnotationOfScene = useMemo(() => {
-    return activeAnnotationIndex === story.scenes[story.scenes.length - 1].annotations.length - 1
-  }, [activeAnnotationIndex, activeSceneIndex, story.scenes])
-
-  const isAtStart = !activeSceneIndex && !activeAnnotationIndex
-  const isAtEnd = activeSceneIndex === story.scenes.length - 1 && isOnLastAnnotationOfScene
-  
-  
-
-  // useEffect(() => {
-  //   const x = imgMapScales.x(lastLocationClicked.x)
-  //   const y = imgMapScales.y(lastLocationClicked.y)
-  //   console.log(x, y)
-  //   setManualFocus({ x, y })
-  // }, [windowDimensions, lastLocationClicked])
 
   useEffect(() => {
     function handleResize() {
@@ -246,87 +219,42 @@ export default function App() {
     setDraggableBounds({ left: xRange[1], top: yRange[1], right: xRange[0], bottom: yRange[0] })
   }, [windowDimensions])
 
-  /*
-  const viewXY = useMemo(() => {
-    if (!Number.isNaN(manualFocus.x) && !Number.isNaN(manualFocus.y)) {
-      return {
-        x: manualFocus.x,
-        y: manualFocus.y,
-        scale: 1
-      }
-    } else {
-      return {
-        x: story.scenes[activeSceneIndex].view_x,
-        y: story.scenes[activeSceneIndex].view_y,
-        scale: story.scenes[activeSceneIndex].scale
-      }
-    }
-   
-  }, [activeSceneIndex, manualFocus.x, manualFocus.y])
-  */
-
   function handleFlavourChange(e) {
-    setFlavour(e.target.value);
+    setActiveArchetypeIndex(parseInt(e.target.value, 10))
   }
 
-  function handlePrevClick() {
-    
-    if (isAtStart) { return }
-    if (!activeAnnotationIndex) {
-      // first annotation, so go to last annotation of prev scene
-      setActiveSceneIndex(s => s - 1)
-      setActiveAnnotationIndex(story.scenes[activeSceneIndex - 1].annotations.length - 1)
-    } else {
-      setActiveAnnotationIndex(i => i - 1)
-    }
-
-  }
-  function handleNextClick() {
-    if (isAtEnd) {
-      // go to start
-      setActiveSceneIndex(0)
-      setActiveAnnotationIndex(0)
+  function handleNextTapped() {
+    // find index of current
+    if (!activeInteractionAreas.length) {
       return
     }
+    let indx = _findIndex(archetypes[activeArchetypeIndex].tooltips, ({ id }) => id === activeInteractionAreas[0].id)
 
-    if (isOnLastAnnotationOfScene) {
-      // next scene available, last annotation
-      setActiveSceneIndex(s => s + 1)
-      setActiveAnnotationIndex(0)
-      return
+    // end check
+    if (indx === archetypes[activeArchetypeIndex].tooltips.length - 1) {
+      indx = 0
     } else {
-      // same scene, next annotation
-      setActiveAnnotationIndex(i => i + 1)
+      indx++
     }
-    
+
+    setActiveInteractionAreas([archetypes[activeArchetypeIndex].tooltips[indx]])
+      
   }
-/*
-  useHotkeys('left, right', e => {
-    const { key } = e
-    e.preventDefault()
-    setManualFocus({ x: null, y: null })
-    if (key === "ArrowRight") {
-      handleNextClick()
-    } else {
-      handlePrevClick()
-    }
-  }, [activeSceneIndex, activeAnnotationIndex])
-*/
+
   function handleDraggableClicked(e) {
     
     const clickX = e.nativeEvent.offsetX
     const clickY = e.nativeEvent.offsetY
-
-    const isAnnotationOpen = activeInteractionAreas.length > 0
     
     // use click location to determine which areas should become active
-    const activeAreas = interactionAreas.filter(({ x, y, width, height }) => {
+    const activeAreas = archetypes[activeArchetypeIndex].tooltips.filter(({ x, y, width, height }) => {
       return clickX >= x && clickX <= x + width && clickY >= y && clickY <= y + height
     })
 
-    // todo - we want to ensure open annotations persist until they are manually closed
-    setActiveInteractionAreas(activeAreas)
-    
+    // we want to ensure open annotations persist until they are manually closed
+    if (activeAreas.length) {
+      setActiveInteractionAreas([activeAreas[0]])
+    }
     
   }
 
@@ -334,19 +262,18 @@ export default function App() {
     setActiveInteractionAreas([])
   }
 
-  const eventHandler = (e, data) => {
+  function handleDragEvent(e, data) {
     
-
     switch (e.type) {
       case "mousedown":
-        console.log('Event Type', e.type, data);
+        // console.log('Event Type', e.type, data);
         if (data && !Number.isNaN(data.x)) {
           setLastMouseDownLocation({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY })
         }
 
         break;
       case "mouseup":
-        console.log('Event Type', e.type, data);
+        // console.log('Event Type', e.type, data);
         setDraggableOffset({ x: data.x, y: data.y })
 
         break;
@@ -360,28 +287,26 @@ export default function App() {
       <Header>
         <img src={process.env.PUBLIC_URL + '/images/logo-small.png'} alt="FABRIQ" height={40} />
         <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Archetype</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={flavour}
-          label="Age"
-          onChange={handleFlavourChange}
-        >
-          <MenuItem value={'default'}>Archetype 1</MenuItem>
-          <MenuItem value={'two'}>Archetype 2</MenuItem>
-          <MenuItem value={'three'}>Archetype 3</MenuItem>
-        </Select>
-      </FormControl>
+          <InputLabel id="archetype-label">Archetype</InputLabel>
+          <Select
+            labelId="archetype-label"
+            id="archetype"
+            value={activeArchetypeIndex}
+            label="Age"
+            onChange={handleFlavourChange}
+          >
+            {archetypes.map((a, i) => <MenuItem key={`archetype-${a.title}`} value={i}>{a.title}</MenuItem>)}
+          </Select>
+        </FormControl>
       </Header>
       <ImageWrap>
         <Draggable
           defaultPosition={{x: -600, y: -1000}}
           bounds={draggableBounds}
           handle=".react-draggable-handle"
-          onStart={eventHandler}
-          onDrag={eventHandler}
-          onStop={eventHandler}>
+          onStart={handleDragEvent}
+          onDrag={handleDragEvent}
+          onStop={handleDragEvent}>
           <div style={{ width: IMG_WIDTH, height: IMG_HEIGHT }}>
             { useVideo ? (
               <Video autoPlay muted loop id="bg-video">
@@ -390,31 +315,20 @@ export default function App() {
             ) : (
                 <Img src={process.env.PUBLIC_URL + '/images/' + IMG_NAME} useMap="#scenemap" alt="" />
             )}
-            {activeInteractionAreas.map((area, i) => <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width, top: area.y - 200 }}><InteractionArea {...area} onClose={handleTooltipClose} /></OverlayWrap>)}
+            {activeInteractionAreas.map((area, i) => (
+              <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width + 100, top: area.y - 200 }}>
+                <Annotation {...area} onClose={handleTooltipClose} onNextTapped={handleNextTapped} />
+                <InteractionPulse />
+              </OverlayWrap>
+              ))
+            }
             <DraggableHandleLayer
               className="react-draggable-handle"
               onTouchEnd={handleDraggableClicked}
               onClick={handleDraggableClicked} />
           </div>
         </Draggable>
-       
-        <AnnotationsWrap>
-          {story.scenes.map((scene, i) => 
-            <div key={`scene-${scene.key}`}>
-              {scene.annotations.map((annot, j) => <Tooltip key={`scene-${scene.key}--annot-${j}`} {...{...annot, tooltip_x: windowDimensions.centerX + annot.tooltip_x, tooltip_y: windowDimensions.centerY + annot.tooltip_y}} isActive={activeSceneIndex === i && activeAnnotationIndex === j} />)}
-            </div>
-          )}
-        </AnnotationsWrap>
-        
       </ImageWrap>
-      {/* <NavWrap>
-        <IconButton aria-label="Backward" onClick={handlePrevClick} disabled={isAtStart}>
-          <PrevIcon />
-        </IconButton>
-        <IconButton aria-label="Forward" onClick={handleNextClick}>
-          <NextIcon />
-        </IconButton>
-      </NavWrap> */}
       <DebugWrap>draggableOffset: {draggableOffset.x}, {draggableOffset.y}, lastMouseDownLocation: {lastMouseDownLocation.x}, {lastMouseDownLocation.y}</DebugWrap>
 
       

@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "npm run content && craco start",
-    "content": "yaml2json -p -s ./src/content/story.yml",
+    "content": "yaml2json -p -s ./data/archetypes.yml",
     "build": "npm run content && craco build",
     "test": "npm run content && craco test",
     "eject": "react-scripts eject",
