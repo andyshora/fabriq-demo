@@ -26,21 +26,7 @@ const Header = styled.header`
   }
 `
 
-const DebugWrap = styled.aside`
-  width: 100%;
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding: 1rem;
-  color: blue;
-  text-align: right;
-  pointer-events: none;
-  font-family: Courier, monospace;
-  font-size: 12px;
-  display: none;
-`
-
-const ImageWrap = styled.div`
+const DraggableAreaWrap = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
@@ -157,8 +143,6 @@ export default function App() {
   const [activeInteractionAreas, setActiveInteractionAreas] = useState([])
   const [activeArchetypeIndex, setActiveArchetypeIndex] = useState(0)
   const [draggableBounds, setDraggableBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
-  const [lastMouseDownLocation, setLastMouseDownLocation] = useState({ x: 0, y: 0 })
-  const [draggableOffset, setDraggableOffset] = useState({ x: 0, y: 0 })
 
   useEffect(() => {
     function handleResize() {
@@ -222,23 +206,6 @@ export default function App() {
     setActiveInteractionAreas([])
   }
 
-  function handleDragEvent(e, data) {
-    switch (e.type) {
-      case "mousedown":
-        // console.log('Event Type', e.type, data);
-        if (data && !Number.isNaN(data.x)) {
-          setLastMouseDownLocation({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY })
-        }
-        break;
-      case "mouseup":
-        // console.log('Event Type', e.type, data);
-        setDraggableOffset({ x: data.x, y: data.y })
-        break;
-      default:
-        break;
-    }
-  }
-
   return (
     <div>
       <Header>
@@ -256,14 +223,11 @@ export default function App() {
           </Select>
         </FormControl>
       </Header>
-      <ImageWrap>
+      <DraggableAreaWrap>
         <Draggable
           defaultPosition={{x: -600, y: -1000}}
           bounds={draggableBounds}
-          handle=".react-draggable-handle"
-          onStart={handleDragEvent}
-          onDrag={handleDragEvent}
-          onStop={handleDragEvent}>
+          handle=".react-draggable-handle">
           <div style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }}>
             <Video autoPlay muted loop id="bg-video">
               <source src={process.env.PUBLIC_URL + '/images/' + archetypes[activeArchetypeIndex].video} type="video/mp4" />
@@ -281,7 +245,7 @@ export default function App() {
               onClick={handleDraggableClicked} />
           </div>
         </Draggable>
-      </ImageWrap>
+      </DraggableAreaWrap>
     </div>
   )
 }
