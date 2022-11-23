@@ -58,6 +58,17 @@ const swipeEnter = keyframes`
   }
 `
 
+const overlayEnter = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+`
+
 const OverlayWrap = styled.div`
   position: absolute;
   animation: ${swipeEnter} 1.6s forwards;
@@ -73,7 +84,7 @@ const OverlayWrap = styled.div`
     position: absolute;
     left: -100px;
     bottom: -20px;
-    animation: ${tooltipEnter} 1.6s forwards;
+    animation: ${overlayEnter} 1.6s forwards;
 
     clip-path: polygon(100% 0, 0 100%, 100% 59%);
 
