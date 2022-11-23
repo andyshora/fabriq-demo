@@ -1,24 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import Draggable from "react-draggable"
 import CloseIcon from "@mui/icons-material/Close"
 import _debounce from "lodash-es/debounce"
 import _findIndex from "lodash-es/findIndex"
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components'
 
 import archetypes from "./archetypes.json"
 
 import { Button, Box, Card, CardContent, Typography, Select, MenuItem, FormControl, InputLabel, IconButton, CardActions } from "@mui/material"
-import { KeyboardArrowRight } from '@mui/icons-material';
+import { KeyboardArrowRight } from '@mui/icons-material'
 
 const ZOOM = 0.5
 
-const IMG_WIDTH = 8000 * ZOOM
-const IMG_HEIGHT = 4000 * ZOOM
-
-const VIDEO_NAME = 'vid_09.mp4'
-const IMG_NAME = 'skeleton.png'
-
-const useVideo = true
+const VIDEO_WIDTH = 8000 * ZOOM
+const VIDEO_HEIGHT = 4000 * ZOOM
 
 const Header = styled.header`
   width: 250px;
@@ -104,23 +99,13 @@ const OverlayWrap = styled.div`
   }
 `
 
-const Img = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate3d(0, 0, 0);
-  width: ${IMG_WIDTH}px;
-  height: ${IMG_HEIGHT}px;
-  transition: all 1s ease;
-`
-
 const Video = styled.video`
   position: absolute;
   top: 0;
   left: 0;
   transform: translate3d(0, 0, 0);
-  width: ${IMG_WIDTH}px;
-  height: ${IMG_HEIGHT}px;
+  width: ${VIDEO_WIDTH}px;
+  height: ${VIDEO_HEIGHT}px;
   transition: all 1s ease;
 `
 
@@ -153,7 +138,6 @@ const InteractionPulse = styled.div`
 `
 
 function Annotation({ id, type, onClose, title, body1, body2, onNextTapped, onLaunchTapped }) {
-
   return (
     <TooltipCard style={{ width: 400 }}>
       <CardContent style={{ minHeight: 200 }}>
@@ -172,8 +156,8 @@ function Annotation({ id, type, onClose, title, body1, body2, onNextTapped, onLa
 }
 
 const DraggableHandleLayer = styled.div({
-  width: IMG_WIDTH,
-  height: IMG_HEIGHT,
+  width: VIDEO_WIDTH,
+  height: VIDEO_HEIGHT,
   position: "absolute",
   left: 0,
   top: 0,
@@ -189,7 +173,7 @@ function getWindowDimensions() {
       height,
       centerX: Math.floor(width / 2),
       centerY: Math.floor(height / 2)
-  };
+  }
 }
 
 export default function App() {
@@ -212,8 +196,8 @@ export default function App() {
   }, [])
 
   useEffect(() => {
-    const xRange = [0, -IMG_WIDTH + windowDimensions.width ]
-    const yRange = [0, -IMG_HEIGHT + windowDimensions.height ]
+    const xRange = [0, -VIDEO_WIDTH + windowDimensions.width ]
+    const yRange = [0, -VIDEO_HEIGHT + windowDimensions.height ]
     setDraggableBounds({ left: xRange[1], top: yRange[1], right: xRange[0], bottom: yRange[0] })
   }, [windowDimensions])
 
@@ -264,19 +248,16 @@ export default function App() {
   }
 
   function handleDragEvent(e, data) {
-    
     switch (e.type) {
       case "mousedown":
         // console.log('Event Type', e.type, data);
         if (data && !Number.isNaN(data.x)) {
           setLastMouseDownLocation({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY })
         }
-
         break;
       case "mouseup":
         // console.log('Event Type', e.type, data);
         setDraggableOffset({ x: data.x, y: data.y })
-
         break;
       default:
         break;
@@ -308,14 +289,10 @@ export default function App() {
           onStart={handleDragEvent}
           onDrag={handleDragEvent}
           onStop={handleDragEvent}>
-          <div style={{ width: IMG_WIDTH, height: IMG_HEIGHT }}>
-            { useVideo ? (
-              <Video autoPlay muted loop id="bg-video">
-                <source src={process.env.PUBLIC_URL + '/images/' + VIDEO_NAME} type="video/mp4" />
-              </Video>
-            ) : (
-                <Img src={process.env.PUBLIC_URL + '/images/' + IMG_NAME} useMap="#scenemap" alt="" />
-            )}
+          <div style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }}>
+            <Video autoPlay muted loop id="bg-video">
+              <source src={process.env.PUBLIC_URL + '/images/' + archetypes[activeArchetypeIndex].video} type="video/mp4" />
+            </Video>
             {activeInteractionAreas.map((area, i) => (
               <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width + 100, top: area.y - 200 }}>
                 <Annotation {...area} onClose={handleTooltipClose} onNextTapped={handleNextTapped} onLaunchTapped={handleLaunchTapped} data-id={area.id} />
@@ -330,10 +307,6 @@ export default function App() {
           </div>
         </Draggable>
       </ImageWrap>
-      <DebugWrap>draggableOffset: {draggableOffset.x}, {draggableOffset.y}, lastMouseDownLocation: {lastMouseDownLocation.x}, {lastMouseDownLocation.y}</DebugWrap>
-
-      
-      {/* <DebugWrap>viewXY: {viewXY.x}, {viewXY.y}, activeKey: {activeKey}, activeSceneIndex: {activeSceneIndex}, activeAnnotationIndex: {activeAnnotationIndex}, isAtStart: {isAtStart ? "YES" : ""}, isAtEnd: {isAtEnd ? "YES" : ""}, isOnLastAnnotationOfScene: {isOnLastAnnotationOfScene ? "YES" : ""}</DebugWrap> */}
     </div>
   )
 }
