@@ -163,10 +163,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 2474,
-        "y": 1254,
-        "width": 250,
-        "height": 120
+        "x": 2449,
+        "y": 1086,
+        "width": 170,
+        "height": 160
       },
       {
         "id": "p",
@@ -185,8 +185,8 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "tooltip",
-        "x": 2445,
-        "y": 284,
+        "x": 2446,
+        "y": 268,
         "width": 80,
         "height": 30
       },
@@ -196,8 +196,8 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "tooltip",
-        "x": 2653,
-        "y": 231,
+        "x": 2664,
+        "y": 207,
         "width": 130,
         "height": 30
       },
@@ -207,8 +207,8 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "tooltip",
-        "x": 2674,
-        "y": 425,
+        "x": 2690,
+        "y": 398,
         "width": 130,
         "height": 30
       },
@@ -218,8 +218,8 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "tooltip",
-        "x": 2836,
-        "y": 308,
+        "x": 2841,
+        "y": 292,
         "width": 130,
         "height": 30
       },
@@ -229,8 +229,8 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "tooltip",
-        "x": 2896,
-        "y": 552,
+        "x": 2908,
+        "y": 529,
         "width": 130,
         "height": 30
       },
@@ -240,8 +240,8 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "tooltip",
-        "x": 3278,
-        "y": 557,
+        "x": 3290,
+        "y": 535,
         "width": 130,
         "height": 30
       },
@@ -251,8 +251,8 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "tooltip",
-        "x": 3113,
-        "y": 434,
+        "x": 3123,
+        "y": 413,
         "width": 130,
         "height": 30
       },
@@ -262,10 +262,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 3265,
-        "y": 797,
-        "width": 200,
-        "height": 130
+        "x": 3344,
+        "y": 654,
+        "width": 170,
+        "height": 180
       },
       {
         "id": "Control Tower",

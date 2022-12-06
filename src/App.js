@@ -189,6 +189,8 @@ export default function App() {
     
     const clickX = e.nativeEvent.offsetX
     const clickY = e.nativeEvent.offsetY
+
+    console.log(clickX, clickY)
     
     // use click location to determine which areas should become active
     const activeAreas = archetypes[activeArchetypeIndex].tooltips.filter(({ x, y, width, height }) => {
