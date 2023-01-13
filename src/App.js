@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import Draggable from "react-draggable"
 import _debounce from "lodash-es/debounce"
 import _findIndex from "lodash-es/findIndex"
-import styled, { keyframes } from 'styled-components'
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material"
+import styled, { css, keyframes } from 'styled-components'
+import { Select, MenuItem, FormControl, FormControlLabel, InputLabel, Switch } from "@mui/material"
 
 import Annotation from "./components/Annotation"
 import archetypes from "./archetypes.json"
@@ -20,19 +20,20 @@ const Header = styled.header`
   background: white;
   z-index: 3;
   clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
+  z-index: 4;
 
   > img {
     margin: 10px 0 10px 2rem;
   }
 `
 
-const DraggableAreaWrap = styled.div`
-  width: 100%;
-  height: 100%;
+const FooterControls = styled.aside`
   position: fixed;
-  overflow: hidden;
+  left: 0r;
+  bottom 0;
+  padding: 1rem;
+  z-index: 4;
 `
-
 
 const swipeEnter = keyframes`
   0% {
@@ -40,19 +41,71 @@ const swipeEnter = keyframes`
   }
   100% {
     opacity: 1;
+  }
+`
 
+
+const fadeOut = keyframes`
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 `
 
 const overlayEnter = keyframes`
   0% {
-    opacity: 0;
     transform: translateX(-50px);
   }
   100% {
-    opacity: 1;
     transform: translateX(0px);
   }
+`
+
+const slideAway = keyframes`
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+`
+
+const slidewayFrag = css`${slideAway} .6s 1s linear forwards`
+const fadeOutFrag = css`${fadeOut} 1s linear forwards`
+
+const AtlasWrap = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0);
+  background: url(images/mesh-white.png) 0 0 no-repeat;
+  background-size: 100%;
+  filter: invert(1) blur(10px);
+`
+
+const WhiteMeshWrap = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0);
+  width: ${VIDEO_WIDTH}px;
+  height: ${VIDEO_HEIGHT}px;
+  background: url(images/mesh-white.png) 0 0 no-repeat;
+  background-size: 100%;
+  animation: ${p => p.isHidden ? slidewayFrag : 'none' };
+`
+
+const DraggableAreaWrap = styled.div`
+  
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  overflow: hidden;
+  z-index: 3;
 `
 
 const OverlayWrap = styled.div`
@@ -85,6 +138,7 @@ const Video = styled.video`
   width: ${VIDEO_WIDTH}px;
   height: ${VIDEO_HEIGHT}px;
   transition: all 1s ease;
+  animation: ${p => p.isHidden ? fadeOutFrag : 'none' };
 `
 
 const pulseEntranceAnim = keyframes`
@@ -142,6 +196,7 @@ export default function App() {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
   const [activeInteractionAreas, setActiveInteractionAreas] = useState([])
   const [activeArchetypeIndex, setActiveArchetypeIndex] = useState(0)
+  const [isAtlasShowing, setIsAtlasShowing] = useState(false)
   const [draggableBounds, setDraggableBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
 
   useEffect(() => {
@@ -159,6 +214,10 @@ export default function App() {
     const yRange = [0, -VIDEO_HEIGHT + windowDimensions.height ]
     setDraggableBounds({ left: xRange[1], top: yRange[1], right: xRange[0], bottom: yRange[0] })
   }, [windowDimensions])
+
+  function handleAtlasSwitchChange(e) {
+    setIsAtlasShowing(e.target.checked)
+  }
 
   function handleFlavourChange(e) {
     setActiveArchetypeIndex(parseInt(e.target.value, 10))
@@ -225,13 +284,19 @@ export default function App() {
           </Select>
         </FormControl>
       </Header>
+      <FooterControls>
+        <FormControlLabel control={<Switch defaultChecked={false}  onChange={handleAtlasSwitchChange} />} label="Show Atlas" />
+        isAtlasShowing: {isAtlasShowing ? "YES" : "NO"}
+      </FooterControls>
       <DraggableAreaWrap>
         <Draggable
           defaultPosition={{x: -600, y: -1000}}
           bounds={draggableBounds}
           handle=".react-draggable-handle">
           <div style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }}>
-            <Video autoPlay muted loop id="bg-video">
+            <AtlasWrap style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }} /> 
+            <WhiteMeshWrap isHidden={isAtlasShowing} style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }} />
+            <Video isHidden={isAtlasShowing} autoPlay muted loop id="bg-video">
               <source src={process.env.PUBLIC_URL + '/images/' + archetypes[activeArchetypeIndex].video} type="video/mp4" />
             </Video>
             {activeInteractionAreas.map((area, i) => (
