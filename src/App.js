@@ -33,6 +33,7 @@ const FooterControls = styled.aside`
   bottom 0;
   padding: 1rem;
   z-index: 4;
+  display: none;
 `
 
 const swipeEnter = keyframes`
