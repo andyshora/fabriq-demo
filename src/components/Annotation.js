@@ -23,7 +23,7 @@ const TooltipCard = styled(Card)`
 
 export default function Annotation({ id, type, onClose, title, body1, body2, onNextTapped, onLaunchTapped }) {
     return (
-      <TooltipCard style={{ width: 400 }}>
+      <TooltipCard style={{ width: 320 }}>
         <CardContent style={{ minHeight: 200 }}>
           <IconButton aria-label="Close" onClick={onClose} style={{ position: 'absolute', right: '0.5rem', top: '0.5rem' }}>
             <CloseIcon />
@@ -34,7 +34,7 @@ export default function Annotation({ id, type, onClose, title, body1, body2, onN
             { body2 ? <Typography sx={{ pt: 0.5 }}>{body2}</Typography> : '' }
           </Box>
         </CardContent>
-        {type === 'launch' ? <CardActions><Button onClick={onLaunchTapped} variant="contained">Launch App</Button></CardActions> : <></>}
+        {type === 'launch' ? <CardActions sx={{ justifyContent: 'center' }}><Button onClick={onLaunchTapped} variant="contained">Launch App</Button></CardActions> : <></>}
       </TooltipCard>
     )
   }
