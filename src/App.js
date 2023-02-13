@@ -297,9 +297,11 @@ export default function App() {
           <div style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }}>
             <AtlasWrap style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }} /> 
             <WhiteMeshWrap isHidden={isAtlasShowing} style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }} />
-            <Video isHidden={isAtlasShowing} autoPlay muted loop id="bg-video">
-              <source src={process.env.PUBLIC_URL + '/images/' + archetypes[activeArchetypeIndex].video} type="video/mp4" />
-            </Video>
+            {archetypes.map((a, i) => (
+              <Video style={{ display: i === activeArchetypeIndex ? "block" : "none" }} isHidden={isAtlasShowing} autoPlay muted loop id="bg-video">
+                <source src={process.env.PUBLIC_URL + '/images/' + a.video} type="video/mp4" />
+              </Video>
+            ))}
             {activeInteractionAreas.map((area, i) => (
               <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width + 100, top: area.y - 200 }}>
                 <Annotation {...area} onClose={handleTooltipClose} onNextTapped={handleNextTapped} onLaunchTapped={handleLaunchTapped} data-id={area.id} />

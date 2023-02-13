@@ -1,5 +1,4 @@
 import CloseIcon from "@mui/icons-material/Close"
-import { KeyboardArrowRight } from '@mui/icons-material'
 import { Button, Box, Card, CardContent, Typography, IconButton, CardActions } from "@mui/material"
 import styled, { keyframes } from 'styled-components'
 
