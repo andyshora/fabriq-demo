@@ -3,7 +3,7 @@ import Draggable from "react-draggable"
 import _debounce from "lodash-es/debounce"
 import _findIndex from "lodash-es/findIndex"
 import styled, { css, keyframes } from 'styled-components'
-import { Select, MenuItem, FormControl, FormControlLabel, InputLabel, Switch } from "@mui/material"
+import { Button, Select, MenuItem, FormControl, FormControlLabel, InputLabel, Switch, Typography } from "@mui/material"
 
 import Annotation from "./components/Annotation"
 import archetypes from "./archetypes.json"
@@ -27,13 +27,18 @@ const Header = styled.header`
   }
 `
 
-const FooterControls = styled.aside`
-  position: fixed;
-  left: 0r;
-  bottom 0;
-  padding: 1rem;
-  z-index: 4;
-  display: none;
+const LayerSwitches = styled.aside`
+  padding: 0 0 1rem 3rem;
+
+  .MuiFormControlLabel-root {
+    display: flex;
+    align-items: center;
+
+    img {
+      position: relative;
+      top: 5px;
+    }
+  }
 `
 
 const swipeEnter = keyframes`
@@ -75,6 +80,20 @@ const slideAway = keyframes`
   }
 `
 
+const DigitalSalesforceLayer1 = styled.video`
+  position: absolute;
+  top: 101px;
+  left: 2540px;
+  z-index: 4;
+  width: 723px;
+  height: 435px;
+  user-select: none;
+  pointer-events: none;
+  clip-path: polygon(0% 0%, 100% 0, 100% 64%, 62% 100%, 0% 100%);
+  display: ${p => p.isHidden ? 'none' : 'block' };
+  transition: opacity 1s ease;
+`
+
 const slidewayFrag = css`${slideAway} .6s 1s linear forwards`
 const fadeOutFrag = css`${fadeOut} 1s linear forwards`
 
@@ -101,12 +120,32 @@ const WhiteMeshWrap = styled.div`
 `
 
 const DraggableAreaWrap = styled.div`
-  
   width: 100%;
   height: 100%;
   position: fixed;
   overflow: hidden;
   z-index: 3;
+`
+
+const AppLinksSection = styled.aside`
+  background: white;
+  padding: 0.5rem 1rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 300px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+
+
+  a {
+    text-decoration: none;
+    margin: 0.25rem;
+  }
 `
 
 const OverlayWrap = styled.div`
@@ -198,6 +237,9 @@ export default function App() {
   const [activeInteractionAreas, setActiveInteractionAreas] = useState([])
   const [activeArchetypeIndex, setActiveArchetypeIndex] = useState(0)
   const [isAtlasShowing, setIsAtlasShowing] = useState(false)
+  const [isSalesforceLayer1Enabled, setIsSalesforceLayer1Enabled] = useState(false)
+  const [isSalesforceLayer2Enabled, setIsSalesforceLayer2Enabled] = useState(false)
+  
   const [draggableBounds, setDraggableBounds] = useState({ left: 0, top: 0, right: 0, bottom: 0 })
 
   useEffect(() => {
@@ -218,6 +260,13 @@ export default function App() {
 
   function handleAtlasSwitchChange(e) {
     setIsAtlasShowing(e.target.checked)
+  }
+
+  function handleSalesforceSwitch1Change(e) {
+    setIsSalesforceLayer1Enabled(e.target.checked)
+  }
+  function handleSalesforceSwitch2Change(e) {
+    setIsSalesforceLayer2Enabled(e.target.checked)
   }
 
   function handleFlavourChange(e) {
@@ -285,10 +334,7 @@ export default function App() {
           </Select>
         </FormControl>
       </Header>
-      <FooterControls>
-        <FormControlLabel control={<Switch defaultChecked={false}  onChange={handleAtlasSwitchChange} />} label="Show Atlas" />
-        isAtlasShowing: {isAtlasShowing ? "YES" : "NO"}
-      </FooterControls>
+      
       <DraggableAreaWrap>
         <Draggable
           defaultPosition={{x: -600, y: -1000}}
@@ -302,6 +348,11 @@ export default function App() {
                 <source src={process.env.PUBLIC_URL + '/images/' + a.video} type="video/mp4" />
               </Video>
             ))}
+            <DigitalSalesforceLayer1 style={{ opacity: isSalesforceLayer1Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop>
+              <source src={process.env.PUBLIC_URL + '/images/salesforce-crop-1.mp4'} type="video/mp4" />
+            </DigitalSalesforceLayer1>
+            
+            {/* <DigitalSalesforceLayer1 style={{ opacity: isSalesforceLayerEnabled ? 1 : 0 }} alt="" src={process.env.PUBLIC_URL + '/images/crop-1.png'} /> */}
             {activeInteractionAreas.map((area, i) => (
               <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width + 100, top: area.y - 200 }}>
                 <Annotation {...area} onClose={handleTooltipClose} onNextTapped={handleNextTapped} onLaunchTapped={handleLaunchTapped} data-id={area.id} />
@@ -316,6 +367,18 @@ export default function App() {
           </div>
         </Draggable>
       </DraggableAreaWrap>
+      <AppLinksSection>
+        <LayerSwitches>
+          {/* <FormControlLabel control={<Switch defaultChecked={false} onChange={handleAtlasSwitchChange} />} label="Show Atlas" /> */}
+          <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch1Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer1Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Digital</>} />
+          <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch2Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer2Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Human</>} />
+        </LayerSwitches>
+        <Typography variant="h5">Launch Apps</Typography>
+        <div>
+          <a href="#"><Button variant="outlined" size="small">Optimixer</Button></a>
+          <a href="#"><Button variant="outlined" size="small">Buddy</Button></a>
+        </div>
+      </AppLinksSection>
     </div>
   )
 }
