@@ -82,14 +82,13 @@ const slideAway = keyframes`
 
 const DigitalSalesforceLayer1 = styled.video`
   position: absolute;
-  top: 101px;
-  left: 2540px;
+  top: 49px;
+  left: 2420px;
+  height: 549px;
   z-index: 4;
-  width: 723px;
-  height: 435px;
   user-select: none;
   pointer-events: none;
-  clip-path: polygon(0% 0%, 100% 0, 100% 64%, 62% 100%, 0% 100%);
+  clip-path: polygon(0% 0%,100% 0%,100% 55%,42% 100%,0% 100%);
   display: ${p => p.isHidden ? 'none' : 'block' };
   transition: opacity 1s ease;
 `
