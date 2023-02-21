@@ -88,7 +88,7 @@ const DigitalSalesforceLayer1 = styled.video`
   z-index: 4;
   user-select: none;
   pointer-events: none;
-  clip-path: polygon(0% 0%,100% 0%,100% 55%,42% 100%,0% 100%);
+  clip-path: polygon(0 33%, 36% 0, 100% 49%, 54% 100%);
   display: ${p => p.isHidden ? 'none' : 'block' };
   transition: opacity 1s ease;
 `
