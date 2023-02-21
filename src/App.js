@@ -88,7 +88,7 @@ const DigitalSalesforceLayer1 = styled.video`
   z-index: 4;
   user-select: none;
   pointer-events: none;
-  clip-path: polygon(0 33%, 36% 0, 100% 49%, 54% 100%);
+  clip-path: polygon(0 33%,36% 0%,96% 48%,37% 100%);
   display: ${p => p.isHidden ? 'none' : 'block' };
   transition: opacity 1s ease;
 `
@@ -369,14 +369,14 @@ export default function App() {
       <AppLinksSection>
         <LayerSwitches>
           {/* <FormControlLabel control={<Switch defaultChecked={false} onChange={handleAtlasSwitchChange} />} label="Show Atlas" /> */}
-          <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch1Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer1Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Digital</>} />
-          <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch2Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer2Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Human</>} />
+          <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch1Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer1Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Activation</>} />
+          {/* <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch2Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer2Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Human</>} /> */}
         </LayerSwitches>
-        <Typography variant="h5">Launch Apps</Typography>
+        {/* <Typography variant="h5">Launch Apps</Typography>
         <div>
           <a href="#"><Button variant="outlined" size="small">Optimixer</Button></a>
           <a href="#"><Button variant="outlined" size="small">Buddy</Button></a>
-        </div>
+        </div> */}
       </AppLinksSection>
     </div>
   )

@@ -34,7 +34,7 @@
     "content": "yaml2json -p -s ./data/archetypes.yml && npm run copy",
     "build": "npm run content && craco build",
     "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build -b gh-pages-amex",
     "copy": "mv ./data/archetypes.json ./src/archetypes.json"
   },
   "eslintConfig": {
