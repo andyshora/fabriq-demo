@@ -16,15 +16,16 @@
     "lodash-es": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-draggable": "^4.4.5",
     "react-scripts": "5.0.1",
-    "styled-components": "^5.3.5",
-    "react-draggable": "^4.4.5"
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "@craco/craco": "^7.0.0-alpha.7",
     "buffer": "^6.0.3",
     "craco-alias": "^3.0.1",
     "crypto-browserify": "^3.12.0",
+    "deploy-to-github-pages": "^1.0.1",
     "gh-pages": "^4.0.0",
     "stream-browserify": "^3.0.0",
     "yamljs": "^0.3.0"
@@ -35,6 +36,8 @@
     "build": "npm run content && craco build",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build -b gh-pages-amex",
+    "deploy-amex": "deploy-to-github-pages -d build -b gh-pages-amex -o andyshora -r https://github.com/andyshora/fabriq-demo.git",
+    "deploy-fix": "echo y | rm -r node_modules/.cache/gh-pages",
     "copy": "mv ./data/archetypes.json ./src/archetypes.json"
   },
   "eslintConfig": {
