@@ -1,6 +1,7 @@
 ---
 - title: Deep CVM
   video: vid_deepcvm.mp4
+  salesforce_modules: false
   tooltips:
   - id: Optimixer
     title: Optimixer
@@ -22,6 +23,7 @@
     height: 250
 - title: Perso
   video: vid_perso.mp4
+  salesforce_modules: false
   tooltips:
   - id: Optimixer
     title: Optimixer
@@ -40,4 +42,48 @@
     x: 3350
     y: 600
     width: 250
-    height: 250  
+    height: 250
+- title: Sales AI
+  video: vid_salesai.mp4
+  salesforce_modules: false
+  tooltips:
+  - id: Optimixer
+    title: Optimixer
+    body1: Voluptatem nam cumque similique accusantium laboriosam sit ex.
+    body2:  Totam voluptas voluptatum sunt earum.
+    type: launch
+    x: 2275
+    y: 1160
+    width: 250
+    height: 250
+  - id: Buddy
+    title: Buddy
+    body1: Voluptatem nam cumque similique accusantium laboriosam sit ex.
+    body2:  Totam voluptas voluptatum sunt earum.
+    type: launch
+    x: 3350
+    y: 600
+    width: 250
+    height: 250
+- title: Salesforce Integration
+  video: vid_deepcvm.mp4
+  salesforce_modules: true
+  tooltips:
+  - id: Optimixer
+    title: Optimixer
+    body1: Voluptatem nam cumque similique accusantium laboriosam sit ex.
+    body2:  Totam voluptas voluptatum sunt earum.
+    type: launch
+    x: 2275
+    y: 1160
+    width: 250
+    height: 250
+  - id: Buddy
+    title: Buddy
+    body1: Voluptatem nam cumque similique accusantium laboriosam sit ex.
+    body2:  Totam voluptas voluptatum sunt earum.
+    type: launch
+    x: 3350
+    y: 600
+    width: 250
+    height: 250

@@ -88,9 +88,16 @@ const DigitalSalesforceLayer1 = styled.video`
   z-index: 4;
   user-select: none;
   pointer-events: none;
-  clip-path: polygon(0 33%, 36% 0, 100% 49%, 54% 100%);
+  clip-path: polygon(0 33%,36% 0%,96% 48%,37% 100%);
   display: ${p => p.isHidden ? 'none' : 'block' };
   transition: opacity 1s ease;
+`
+
+const DigitalSalesforceLayer2 = styled(DigitalSalesforceLayer1)`
+  top: 288px;
+  left: 2893px;
+  height: 549px;
+  clip-path: polygon(-5% 50%,42% 7%,96% 48%,37% 100%);
 `
 
 const slidewayFrag = css`${slideAway} .6s 1s linear forwards`
@@ -150,7 +157,7 @@ const AppLinksSection = styled.aside`
 const OverlayWrap = styled.div`
   position: absolute;
   animation: ${swipeEnter} 1.6s forwards;
-  z-index: 2;
+  z-index: 5;
   
   &::after {
     content: '';
@@ -282,7 +289,7 @@ export default function App() {
       return
     }
     let indx = _findIndex(archetypes[activeArchetypeIndex].tooltips, ({ id }) => id === activeInteractionAreas[0].id)
-
+    
     // end check
     if (indx === archetypes[activeArchetypeIndex].tooltips.length - 1) {
       indx = 0
@@ -347,10 +354,16 @@ export default function App() {
                 <source src={process.env.PUBLIC_URL + '/images/' + a.video} type="video/mp4" />
               </Video>
             ))}
-            <DigitalSalesforceLayer1 style={{ opacity: isSalesforceLayer1Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop>
-              <source src={process.env.PUBLIC_URL + '/images/salesforce-crop-1.mp4'} type="video/mp4" />
-            </DigitalSalesforceLayer1>
-            
+             {archetypes[activeArchetypeIndex].salesforce_modules ? (
+              <>
+                <DigitalSalesforceLayer1 style={{ opacity: isSalesforceLayer1Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop>
+                  <source src={process.env.PUBLIC_URL + '/images/salesforce-digital-crop.mp4'} type="video/mp4" />
+                </DigitalSalesforceLayer1>
+                <DigitalSalesforceLayer2 style={{ opacity: isSalesforceLayer2Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop>
+                  <source src={process.env.PUBLIC_URL + '/images/salesforce-human-crop.mp4'} type="video/mp4" />
+                </DigitalSalesforceLayer2>
+              </>
+             ) : ""}
             {/* <DigitalSalesforceLayer1 style={{ opacity: isSalesforceLayerEnabled ? 1 : 0 }} alt="" src={process.env.PUBLIC_URL + '/images/crop-1.png'} /> */}
             {activeInteractionAreas.map((area, i) => (
               <OverlayWrap key={`interaction-area-${area.id}`} style={{ width: area.width, left: area.x + area.width + 100, top: area.y - 200 }}>
@@ -367,15 +380,17 @@ export default function App() {
         </Draggable>
       </DraggableAreaWrap>
       <AppLinksSection>
-        <LayerSwitches>
-          {/* <FormControlLabel control={<Switch defaultChecked={false} onChange={handleAtlasSwitchChange} />} label="Show Atlas" /> */}
-          <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch1Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer1Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Digital</>} />
-          <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch2Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer2Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Human</>} />
-        </LayerSwitches>
+        {archetypes[activeArchetypeIndex].salesforce_modules ? (
+          <LayerSwitches>
+            {/* <FormControlLabel control={<Switch defaultChecked={false} onChange={handleAtlasSwitchChange} />} label="Show Atlas" /> */}
+            <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch1Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer1Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Digital</>} />
+            <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch2Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer2Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Human</>} />
+          </LayerSwitches>
+        ) : ""}
         <Typography variant="h5">Launch Apps</Typography>
         <div>
-          <a href="#"><Button variant="outlined" size="small">Optimixer</Button></a>
-          <a href="#"><Button variant="outlined" size="small">Buddy</Button></a>
+          <a href="#todo"><Button variant="outlined" size="small">Optimixer</Button></a>
+          <a href="#todo"><Button variant="outlined" size="small">Buddy</Button></a>
         </div>
       </AppLinksSection>
     </div>
