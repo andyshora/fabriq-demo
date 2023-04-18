@@ -326,7 +326,7 @@ export default function App() {
   return (
     <div>
       <Header>
-        <img src={process.env.PUBLIC_URL + '/images/logo-small.png'} alt="FABRIQ" height={40} />
+        {/* <img src={process.env.PUBLIC_URL + '/images/logo-small.png'} alt="FABRIQ" height={40} /> */}
         <FormControl fullWidth>
           <InputLabel id="archetype-label">Archetype</InputLabel>
           <Select
@@ -379,20 +379,6 @@ export default function App() {
           </div>
         </Draggable>
       </DraggableAreaWrap>
-      <AppLinksSection>
-        {archetypes[activeArchetypeIndex].salesforce_modules ? (
-          <LayerSwitches>
-            {/* <FormControlLabel control={<Switch defaultChecked={false} onChange={handleAtlasSwitchChange} />} label="Show Atlas" /> */}
-            <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch1Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer1Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Digital</>} />
-            <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch2Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer2Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Human</>} />
-          </LayerSwitches>
-        ) : ""}
-        <Typography variant="h5">Launch Apps</Typography>
-        <div>
-          <a href="#todo"><Button variant="outlined" size="small">Optimixer</Button></a>
-          <a href="#todo"><Button variant="outlined" size="small">Buddy</Button></a>
-        </div>
-      </AppLinksSection>
     </div>
   )
 }
