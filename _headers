@@ -1,0 +1,4 @@
+# Example configuration in a _headers file
+
+*.mp4
+  Accept-Ranges: bytes
