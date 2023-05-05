@@ -1,6 +1,6 @@
 ---
 - title: Deep CVM
-  video: vid_deepcvm.mp4
+  video: vid_deepcvm_4000-2000_0001-0100.mp4
   salesforce_modules: false
   tooltips:
   - id: Optimixer
@@ -66,7 +66,7 @@
     width: 125
     height: 125
 - title: Salesforce Integration
-  video: vid_deepcvm.mp4
+  video: vid_deepcvm_4000-2000_0001-0100.mp4
   salesforce_modules: true
   tooltips:
   - id: Optimixer
