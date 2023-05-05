@@ -34,7 +34,9 @@
     "content": "yaml2json -p -s ./data/archetypes.yml && npm run copy",
     "build": "npm run content && craco build",
     "eject": "react-scripts eject",
-    "deploy": "gh-pages -d build -b wwom",
+    "gh-pages-clean": "node node_modules/gh-pages/bin/gh-pages-clean.js",
+    "deploy-external": "gh-pages -d build -r https://github.com/andyshora/fabriq-demo.git",
+    "deploy-internal": "gh-pages -d build -r https://github.gamma.bcg.com/Shora-Andy/perso-demo.git",
     "copy": "mv ./data/archetypes.json ./src/archetypes.json"
   },
   "eslintConfig": {

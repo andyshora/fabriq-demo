@@ -10,10 +10,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 2275,
-        "y": 1160,
-        "width": 250,
-        "height": 250
+        "x": 1138,
+        "y": 580,
+        "width": 125,
+        "height": 125
       },
       {
         "id": "Buddy",
@@ -21,10 +21,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 3350,
-        "y": 600,
-        "width": 250,
-        "height": 250
+        "x": 1675,
+        "y": 300,
+        "width": 125,
+        "height": 125
       }
     ]
   },
@@ -39,10 +39,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 2275,
-        "y": 1160,
-        "width": 250,
-        "height": 250
+        "x": 1138,
+        "y": 580,
+        "width": 125,
+        "height": 125
       },
       {
         "id": "Buddy",
@@ -50,16 +50,16 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 3350,
-        "y": 600,
-        "width": 250,
-        "height": 250
+        "x": 1675,
+        "y": 300,
+        "width": 125,
+        "height": 125
       }
     ]
   },
   {
     "title": "Sales AI",
-    "video": "vid_salesai.mp4",
+    "video": "vid_salesai_4000-2000_0001-0100.mp4",
     "salesforce_modules": false,
     "tooltips": [
       {
@@ -68,10 +68,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 2275,
-        "y": 1160,
-        "width": 250,
-        "height": 250
+        "x": 1138,
+        "y": 580,
+        "width": 125,
+        "height": 125
       },
       {
         "id": "Buddy",
@@ -79,10 +79,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 3350,
-        "y": 600,
-        "width": 250,
-        "height": 250
+        "x": 1675,
+        "y": 300,
+        "width": 125,
+        "height": 125
       }
     ]
   },
@@ -97,10 +97,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 2275,
-        "y": 1160,
-        "width": 250,
-        "height": 250
+        "x": 1138,
+        "y": 580,
+        "width": 125,
+        "height": 125
       },
       {
         "id": "Buddy",
@@ -108,10 +108,10 @@
         "body1": "Voluptatem nam cumque similique accusantium laboriosam sit ex.",
         "body2": "Totam voluptas voluptatum sunt earum.",
         "type": "launch",
-        "x": 3350,
-        "y": 600,
-        "width": 250,
-        "height": 250
+        "x": 1675,
+        "y": 300,
+        "width": 125,
+        "height": 125
       }
     ]
   }

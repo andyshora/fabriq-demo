@@ -9,8 +9,8 @@ import Annotation from "./components/Annotation"
 import archetypes from "./archetypes.json"
 
 const ZOOM = 0.5
-const VIDEO_WIDTH = 8000 * ZOOM
-const VIDEO_HEIGHT = 4000 * ZOOM
+const VIDEO_WIDTH = 4000 * ZOOM
+const VIDEO_HEIGHT = 2000 * ZOOM
 
 const Header = styled.header`
   width: 250px;
@@ -82,9 +82,9 @@ const slideAway = keyframes`
 
 const DigitalSalesforceLayer1 = styled.video`
   position: absolute;
-  top: 49px;
-  left: 2420px;
-  height: 549px;
+  top: 25px;
+  left: 1210px;
+  height: 225px;
   z-index: 4;
   user-select: none;
   pointer-events: none;
@@ -94,9 +94,9 @@ const DigitalSalesforceLayer1 = styled.video`
 `
 
 const DigitalSalesforceLayer2 = styled(DigitalSalesforceLayer1)`
-  top: 288px;
-  left: 2893px;
-  height: 549px;
+  top: 144px;
+  left: 1446px;
+  height: 225px;
   clip-path: polygon(-5% 50%,42% 7%,96% 48%,37% 100%);
 `
 
@@ -326,7 +326,6 @@ export default function App() {
   return (
     <div>
       <Header>
-        {/* <img src={process.env.PUBLIC_URL + '/images/logo-small.png'} alt="FABRIQ" height={40} /> */}
         <FormControl fullWidth>
           <InputLabel id="archetype-label">Archetype</InputLabel>
           <Select
@@ -343,23 +342,23 @@ export default function App() {
       
       <DraggableAreaWrap>
         <Draggable
-          defaultPosition={{x: -600, y: -1000}}
+          defaultPosition={{x: -300, y: -500}}
           bounds={draggableBounds}
           handle=".react-draggable-handle">
           <div style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }}>
             <AtlasWrap style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }} /> 
             <WhiteMeshWrap isHidden={isAtlasShowing} style={{ width: VIDEO_WIDTH, height: VIDEO_HEIGHT }} />
             {archetypes.map((a, i) => (
-              <Video style={{ display: i === activeArchetypeIndex ? "block" : "none" }} isHidden={isAtlasShowing} autoPlay muted loop id="bg-video">
+              <Video style={{ display: i === activeArchetypeIndex ? "block" : "none" }} isHidden={isAtlasShowing} autoPlay muted loop playsInline id="bg-video">
                 <source src={process.env.PUBLIC_URL + '/images/' + a.video} type="video/mp4" />
               </Video>
             ))}
              {archetypes[activeArchetypeIndex].salesforce_modules ? (
               <>
-                <DigitalSalesforceLayer1 style={{ opacity: isSalesforceLayer1Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop>
+                <DigitalSalesforceLayer1 style={{ opacity: isSalesforceLayer1Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop playsInline>
                   <source src={process.env.PUBLIC_URL + '/images/salesforce-digital-crop.mp4'} type="video/mp4" />
                 </DigitalSalesforceLayer1>
-                <DigitalSalesforceLayer2 style={{ opacity: isSalesforceLayer2Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop>
+                <DigitalSalesforceLayer2 style={{ opacity: isSalesforceLayer2Enabled ? 1 : 0 }} isHidden={isAtlasShowing} autoPlay muted loop playsInline>
                   <source src={process.env.PUBLIC_URL + '/images/salesforce-human-crop.mp4'} type="video/mp4" />
                 </DigitalSalesforceLayer2>
               </>
@@ -379,6 +378,15 @@ export default function App() {
           </div>
         </Draggable>
       </DraggableAreaWrap>
+      <AppLinksSection>
+        {archetypes[activeArchetypeIndex].salesforce_modules ? (
+          <LayerSwitches>
+            {/* <FormControlLabel control={<Switch defaultChecked={false} onChange={handleAtlasSwitchChange} />} label="Show Atlas" /> */}
+            <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch1Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer1Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Digital</>} />
+            <FormControlLabel control={<Switch color="secondary" size="small" defaultChecked={false} onChange={handleSalesforceSwitch2Change} />} label={<><img height="20" style={{ filter: isSalesforceLayer2Enabled ? "none" : "grayscale(1) opacity(0.5)" }} src={process.env.PUBLIC_URL + '/images/logo-assets/logo-salesforce.svg'} alt="SF" /> Human</>} />
+          </LayerSwitches>
+        ) : ""}
+      </AppLinksSection>
     </div>
   )
 }
